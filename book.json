@@ -1,0 +1,16 @@
+﻿{
+    "title": "知识小集",
+    "description": "知识小集收录我的学习经历和工作经历...",
+    "author": "zhoumin",
+    "generator": "site",
+    "language": "zh-hans",
+    "links": {
+        "sidebar": {
+            "GitHub主页": "https://github.com/z251257144"
+        },
+        "gitbook": true
+    },
+    "plugins": [
+    		
+    ]
+}
