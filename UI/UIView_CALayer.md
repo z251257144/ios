@@ -78,8 +78,6 @@
 @end
 ```
 
-
-
 ## 布局关系
 一个`CALayer`的布局是由它的`anchorPoint`, `position`, `bounds`和`transform`共同决定的，而`UIView`的`frame`只是简单的返回其`layer`的`frame`，同样`UIView`的`center`和`bounds`也是返回 其`Layer`的一些属性。
 
@@ -160,25 +158,17 @@ UIView中`center` = CALayer中`position`+`bounds.size` * `anchorPoint`
 >`layer` 通过向它的`delegate`发送`actionForLayer:forKey:`消息来询问提供一个对应属性变化的`action`。`delegate` 可以通过返回以下三者之一来进行响应：
 
 >1、它可以返回一个动作对象，这种情况下 `layer` 将使用这个动作。
-2、它可以返回一个 nil， 这样 `layer` 就会到其他地方继续寻找。
-3、它可以返回一个 NSNull 对象，告诉`layer`这里不需要执行一个动作，搜索也会就此停止。
+
+>2、它可以返回一个 nil， 这样 `layer` 就会到其他地方继续寻找。
+
+>3、它可以返回一个 NSNull 对象，告诉`layer`这里不需要执行一个动作，搜索也会就此停止。
 
 >当`layer`在背后支持一个`view`的时候，`view`就是它的 delegate。
 
 ## 总结
 `UIView`：属于`UIKit.framework`框架，负责渲染矩形区域的内容，为矩形区域添加动画，响应区域的触摸事件、布局和管理一个或者多个子视图
 
-
 `CALAyer`：属于`QuartzCore.framework`,是用来绘制内容的，对内容进行动画处理，不能处理用户事件。
-
-UIwindow：属于UIkit。framework框架，是一种特殊的UIview，通常在一个程序中只会有一个UIwindow，但是可以手动创建多个UIwindow，同时加到程序里面。UIwindow在程序中起到三个作用：
-
-1.作为容器，包好APP所要显示的所有视图。
-
-2.传递触摸消息到程序中的view和其他对象
-
-3.与uiviewcontroller协同工作，方便完成设备方向旋转的支持
-
 
 每个`UIView`内部都有一个`CALayer`在背后提供内容的绘制和显示，并且`UIView`的尺寸样式都由内部的`Layer`所提供，`Layer`比`View`多了个`AnchorPoint`。两者都是树状层级结构，`layer`内部有`SubLayers`，`View` 内部有 `SubViews`。
 
@@ -189,5 +179,7 @@ UIwindow：属于UIkit。framework框架，是一种特殊的UIview，通常在�
 `layer`内部维护着三分`layer tree`,分别是 `presentLayer Tree(动画树)`, `modeLayer Tree(模型树)`, `Render Tree (渲染树)`,在做 iOS动画的时候，我们修改动画的属性，在动画的其实是`Layer`的 `presentLayer`的属性值, 而最终展示在界面上的其实是提供`View`的`modelLayer`。
 
 参考文档：
+
 https://www.jianshu.com/p/ed40da9303b1
+
 https://www.jianshu.com/p/c6924e2ab232
