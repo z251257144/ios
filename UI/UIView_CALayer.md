@@ -97,14 +97,11 @@ CALayer有两种坐标系类型："基于点的坐标系"和"基于单位的坐�
 
 #### 四者之间的关系：
 
-frame 和 bounds 之间的关系很简单， frame.origin = CGMakePoint(0,0)就是bounds。
+`frame`和`bounds`之间的关系很简单，frame.origin = CGMakePoint(0,0)就是bounds。
 
-CALayer中决定Layer大小和在superLayer中位置的是bounds 和 position。尽管Layer具有frame属性，但该属性实际上是从bounds和position属性中的值派生的，并且使用频率较低。
+`CALayer`中决定`Layer`大小和在`superLayer`中位置的是`bounds`和`position`。尽管`Layer`具有`frame`属性，但该属性实际上是从`bounds`和`position`属性中的值派生的，并且使用频率较低。
 
-![](media/15940914708346.jpg)
-
-
-anchorPoint、position、frame之间的相对关系.
+`anchorPoint`、`position`、`frame`之间的相对关系.
 
 Ⅰ、当确定锚点时，改变`frame`时, `position`的值为:
 >position.x= frame.origin.x+ anchorPoint.x* bounds.size.width；
@@ -150,19 +147,19 @@ UIView中`center` = CALayer中`position`+`bounds.size` * `anchorPoint`
 基本上你改变一个单独的`layer`的任何属性的时候，都会触发一个从旧的值过渡到新值的简单动画（这就是所谓的**隐式动画**）。然而，如果你改变的是`view` 中 `layer` 的同一个属性，它只会从这一帧直接跳变到下一帧。尽管两种情况中都有 `layer`，但是当 `layer` 附加在 `view` 上时，它的默认的隐式动画的 layer 行为就不起作用了。
 
 >在 Core Animation 编程指南的 “How to Animate Layer-Backed Views” 中，对为什么会这样做出了一个解释：
-
+>
 >UIView 默认情况下禁止了 layer 动画，但是在 `animation block` 中又重新启用了它们。
-
+>
 >是因为任何可动画的 `layer` 属性改变时，`layer` 都会寻找并运行合适的`action`来实行这个改变。在 `Core Animation` 的专业术语中就把这样的动画统称为动作 (`action`，或者 `CAAction`)。
-
+>
 >`layer` 通过向它的`delegate`发送`actionForLayer:forKey:`消息来询问提供一个对应属性变化的`action`。`delegate` 可以通过返回以下三者之一来进行响应：
-
+>
 >1、它可以返回一个动作对象，这种情况下 `layer` 将使用这个动作。
-
+>
 >2、它可以返回一个 nil， 这样 `layer` 就会到其他地方继续寻找。
-
+>
 >3、它可以返回一个 NSNull 对象，告诉`layer`这里不需要执行一个动作，搜索也会就此停止。
-
+>
 >当`layer`在背后支持一个`view`的时候，`view`就是它的 delegate。
 
 ## 总结
