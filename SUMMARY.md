@@ -6,6 +6,5 @@
     * [多线程实现方式](multithreading/iOS多线程开发－多线程实现方式.md)
     * [线程安全](multithreading/iOS多线程开发－线程安全.md)
     * [RunLoop](multithreading/iOS多线程开发－RunLoop.md)
-* [Part II](part2/README.md)
-    * [We love feedback](part2/feedback_please.md)
-
+* UI
+    * [UI](UI/UIView_CALayer.md)
