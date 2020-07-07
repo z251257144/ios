@@ -1,4 +1,4 @@
-# UIView & CALayer
+# UIView & CALayer 关系
 
 `UIView`和`CALayer`概念上很相似，同样也是一些被层级关系树管理的矩形块，同样也可以包含一些内容，管理子图层的位置。两者不同的是：`UIView`可以处理触摸事件；`CALayer`不处理用户的交互，不参与响应事件传递。
 
@@ -77,6 +77,7 @@
 
 @end
 ```
+
 
 
 ## 布局关系
@@ -165,6 +166,20 @@ UIView中`center` = CALayer中`position`+`bounds.size` * `anchorPoint`
 >当`layer`在背后支持一个`view`的时候，`view`就是它的 delegate。
 
 ## 总结
+`UIView`：属于`UIKit.framework`框架，负责渲染矩形区域的内容，为矩形区域添加动画，响应区域的触摸事件、布局和管理一个或者多个子视图
+
+
+`CALAyer`：属于`QuartzCore.framework`,是用来绘制内容的，对内容进行动画处理，不能处理用户事件。
+
+UIwindow：属于UIkit。framework框架，是一种特殊的UIview，通常在一个程序中只会有一个UIwindow，但是可以手动创建多个UIwindow，同时加到程序里面。UIwindow在程序中起到三个作用：
+
+1.作为容器，包好APP所要显示的所有视图。
+
+2.传递触摸消息到程序中的view和其他对象
+
+3.与uiviewcontroller协同工作，方便完成设备方向旋转的支持
+
+
 每个`UIView`内部都有一个`CALayer`在背后提供内容的绘制和显示，并且`UIView`的尺寸样式都由内部的`Layer`所提供，`Layer`比`View`多了个`AnchorPoint`。两者都是树状层级结构，`layer`内部有`SubLayers`，`View` 内部有 `SubViews`。
 
 在`View`显示的时候，`UIView` 做为 `Layer` 的`CALayerDelegate`,`View`的显示内容取决于内部的 `CALayer`的`display`。
