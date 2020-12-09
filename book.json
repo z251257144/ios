@@ -11,6 +11,11 @@
         "gitbook": true
     },
     "plugins": [
-    		
-    ]
-}
+   			"theme-comscore"
+    ],
+    "pluginsConfig": {
+    		"theme-default": {
+        		"showLevel": true
+    		}
+		}
+}	
