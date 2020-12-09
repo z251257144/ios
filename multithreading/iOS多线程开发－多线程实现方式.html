@@ -1,0 +1,689 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>多线程实现方式 · 知识小集</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="zhoumin">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="iOS多线程开发－线程安全.html" />
+    
+    
+    <link rel="prev" href="iOS多线程开发－线程原理.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+    
+        
+        <li>
+            <a href="https://github.com/z251257144" target="_blank" class="custom-link">GitHub主页</a>
+        </li>
+    
+    
+
+    
+    <li class="divider"></li>
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" >
+            
+                <span>
+            
+                    
+                    InterView
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../InterView/Foundation.html">
+            
+                <a href="../InterView/Foundation.html">
+            
+                    
+                    Foundation
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" >
+            
+                <span>
+            
+                    
+                    多线程开发
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="iOS多线程开发－线程原理.html">
+            
+                <a href="iOS多线程开发－线程原理.html">
+            
+                    
+                    线程原理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.2" data-path="iOS多线程开发－多线程实现方式.html">
+            
+                <a href="iOS多线程开发－多线程实现方式.html">
+            
+                    
+                    多线程实现方式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="iOS多线程开发－线程安全.html">
+            
+                <a href="iOS多线程开发－线程安全.html">
+            
+                    
+                    线程安全
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="iOS多线程开发－RunLoop.html">
+            
+                <a href="iOS多线程开发－RunLoop.html">
+            
+                    
+                    RunLoop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <span>
+            
+                    
+                    UI
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../UI/UIView_CALayer.html">
+            
+                <a href="../UI/UIView_CALayer.html">
+            
+                    
+                    UIView & CALayer 关系
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >多线程实现方式</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x6982;&#x89C8;">&#x6982;&#x89C8;</h2>
+<p>&#x200B;        &#x5927;&#x5BB6;&#x90FD;&#x77E5;&#x9053;&#xFF0C;&#x5728;&#x5F00;&#x53D1;&#x8FC7;&#x7A0B;&#x4E2D;&#x5E94;&#x8BE5;&#x5C3D;&#x53EF;&#x80FD;&#x51CF;&#x5C11;&#x7528;&#x6237;&#x7B49;&#x5F85;&#x65F6;&#x95F4;&#xFF0C;&#x8BA9;&#x7A0B;&#x5E8F;&#x5C3D;&#x53EF;&#x80FD;&#x5FEB;&#x7684;&#x5B8C;&#x6210;&#x8FD0;&#x7B97;&#x3002;&#x53EF;&#x662F;&#x65E0;&#x8BBA;&#x662F;&#x54EA;&#x79CD;&#x8BED;&#x8A00;&#x5F00;&#x53D1;&#x7684;&#x7A0B;&#x5E8F;&#x6700;&#x7EC8;&#x5F80;&#x5F80;&#x8F6C;&#x6362;&#x6210;&#x6C47;&#x7F16;&#x8BED;&#x8A00;&#x8FDB;&#x800C;&#x89E3;&#x91CA;&#x6210;&#x673A;&#x5668;&#x7801;&#x6765;&#x6267;&#x884C;&#x3002;&#x4F46;&#x662F;&#x673A;&#x5668;&#x7801;&#x662F;&#x6309;&#x987A;&#x5E8F;&#x6267;&#x884C;&#x7684;&#xFF0C;&#x4E00;&#x4E2A;&#x590D;&#x6742;&#x7684;&#x591A;&#x6B65;&#x64CD;&#x4F5C;&#x53EA;&#x80FD;&#x4E00;&#x6B65;&#x6B65;&#x6309;&#x987A;&#x5E8F;&#x9010;&#x4E2A;&#x6267;&#x884C;&#x3002;&#x6539;&#x53D8;&#x8FD9;&#x79CD;&#x72B6;&#x51B5;&#x53EF;&#x4EE5;&#x4ECE;&#x4E24;&#x4E2A;&#x89D2;&#x5EA6;&#x51FA;&#x53D1;&#xFF1A;</p>
+<p><strong>&#x5355;&#x6838;&#x5904;&#x7406;&#x5668;</strong>&#xFF1A;&#x53EF;&#x4EE5;&#x5C06;&#x591A;&#x4E2A;&#x6B65;&#x9AA4;&#x653E;&#x5230;&#x4E0D;&#x540C;&#x7684;&#x7EBF;&#x7A0B;&#xFF0C;&#x8FD9;&#x6837;&#x4E00;&#x6765;&#x7528;&#x6237;&#x5B8C;&#x6210;UI&#x64CD;&#x4F5C;&#x540E;&#x5176;&#x4ED6;&#x540E;&#x7EED;&#x4EFB;&#x52A1;&#x5728;&#x5176;&#x4ED6;&#x7EBF;&#x7A0B;&#x4E2D;&#xFF0C;&#x5F53;CPU&#x7A7A;&#x95F2;&#x65F6;&#x4F1A;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#xFF0C;&#x800C;&#x6B64;&#x65F6;&#x5BF9;&#x4E8E;&#x7528;&#x6237;&#x800C;&#x8A00;&#x53EF;&#x4EE5;&#x7EE7;&#x7EED;&#x8FDB;&#x884C;&#x5176;&#x4ED6;&#x64CD;&#x4F5C;&#xFF1B;</p>
+<p><strong>&#x591A;&#x6838;&#x5904;&#x7406;&#x5668;</strong>&#xFF1A;&#x5982;&#x679C;&#x7528;&#x6237;&#x5728;UI&#x7EBF;&#x7A0B;&#x4E2D;&#x5B8C;&#x6210;&#x67D0;&#x4E2A;&#x64CD;&#x4F5C;&#x4E4B;&#x540E;&#xFF0C;&#x5176;&#x4ED6;&#x540E;&#x7EED;&#x64CD;&#x4F5C;&#x5728;&#x522B;&#x7684;&#x7EBF;&#x7A0B;&#x4E2D;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#xFF0C;&#x7528;&#x6237;&#x540C;&#x6837;&#x53EF;&#x4EE5;&#x7EE7;&#x7EED;&#x8FDB;&#x884C;&#x5176;&#x4ED6;UI&#x64CD;&#x4F5C;&#xFF0C;&#x4E0E;&#x6B64;&#x540C;&#x65F6;&#x524D;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x7684;&#x540E;&#x7EED;&#x4EFB;&#x52A1;&#x53EF;&#x4EE5;&#x5206;&#x6563;&#x5230;&#x591A;&#x4E2A;&#x7A7A;&#x95F2;CPU&#x4E2D;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#xFF08;&#x5F53;&#x7136;&#x5177;&#x4F53;&#x8C03;&#x5EA6;&#x987A;&#x5E8F;&#x8981;&#x6839;&#x636E;&#x7A0B;&#x5E8F;&#x8BBE;&#x8BA1;&#x800C;&#x5B9A;&#xFF09;&#xFF0C;&#x53CA;&#x89E3;&#x51B3;&#x4E86;&#x7EBF;&#x7A0B;&#x963B;&#x585E;&#x53C8;&#x63D0;&#x9AD8;&#x4E86;&#x8FD0;&#x884C;&#x6548;&#x7387;&#x3002;</p>
+<h2 id="&#x7B80;&#x4ECB;">&#x7B80;&#x4ECB;</h2>
+<p>&#x200B;        &#x5F53;&#x7528;&#x6237;&#x64AD;&#x653E;&#x97F3;&#x9891;&#x3001;&#x4E0B;&#x8F7D;&#x8D44;&#x6E90;&#x3001;&#x8FDB;&#x884C;&#x56FE;&#x50CF;&#x5904;&#x7406;&#x65F6;&#x5F80;&#x5F80;&#x5E0C;&#x671B;&#x505A;&#x8FD9;&#x4E9B;&#x4E8B;&#x60C5;&#x7684;&#x65F6;&#x5019;&#x5176;&#x4ED6;&#x64CD;&#x4F5C;&#x4E0D;&#x4F1A;&#x88AB;&#x4E2D;&#x65AD;&#x6216;&#x8005;&#x5E0C;&#x671B;&#x8FD9;&#x4E9B;&#x64CD;&#x4F5C;&#x8FC7;&#x7A0B;&#x4E2D;&#x66F4;&#x52A0;&#x987A;&#x7545;&#x3002;&#x5728;&#x5355;&#x7EBF;&#x7A0B;&#x4E2D;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x53EA;&#x80FD;&#x505A;&#x4E00;&#x4EF6;&#x4E8B;&#x60C5;&#xFF0C;&#x4E00;&#x4EF6;&#x4E8B;&#x60C5;&#x5904;&#x7406;&#x4E0D;&#x5B8C;&#x53E6;&#x4E00;&#x4EF6;&#x4E8B;&#x5C31;&#x4E0D;&#x80FD;&#x5F00;&#x59CB;&#xFF0C;&#x8FD9;&#x6837;&#x52BF;&#x5FC5;&#x5F71;&#x54CD;&#x7528;&#x6237;&#x4F53;&#x9A8C;&#x3002;&#x65E9;&#x5728;&#x5355;&#x6838;&#x5904;&#x7406;&#x5668;&#x65F6;&#x671F;&#x5C31;&#x6709;&#x591A;&#x7EBF;&#x7A0B;&#xFF0C;&#x8FD9;&#x4E2A;&#x65F6;&#x5019;&#x591A;&#x7EBF;&#x7A0B;&#x66F4;&#x591A;&#x7684;&#x7528;&#x4E8E;&#x89E3;&#x51B3;&#x7EBF;&#x7A0B;&#x963B;&#x585E;&#x9020;&#x6210;&#x7684;&#x7528;&#x6237;&#x7B49;&#x5F85;&#xFF08;&#x901A;&#x5E38;&#x662F;&#x64CD;&#x4F5C;&#x5B8C;UI&#x540E;&#x7528;&#x6237;&#x4E0D;&#x518D;&#x5E72;&#x6D89;&#xFF0C;&#x5176;&#x4ED6;&#x7EBF;&#x7A0B;&#x5728;&#x7B49;&#x5F85;&#x961F;&#x5217;&#x4E2D;&#xFF0C;CPU&#x4E00;&#x65E6;&#x7A7A;&#x95F2;&#x5C31;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#xFF0C;&#x4E0D;&#x5F71;&#x54CD;&#x7528;&#x6237;&#x5176;&#x4ED6;UI&#x64CD;&#x4F5C;&#xFF09;&#xFF0C;&#x5176;&#x5904;&#x7406;&#x80FD;&#x529B;&#x5E76;&#x6CA1;&#x6709;&#x660E;&#x663E;&#x7684;&#x53D8;&#x5316;&#x3002;&#x5982;&#x4ECA;&#x65E0;&#x8BBA;&#x662F;&#x79FB;&#x52A8;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x8FD8;&#x662F;PC&#x3001;&#x670D;&#x52A1;&#x5668;&#x90FD;&#x662F;&#x591A;&#x6838;&#x5904;&#x7406;&#x5668;&#xFF0C;&#x4E8E;&#x662F;&#x201C;&#x5E76;&#x884C;&#x8FD0;&#x7B97;&#x201D;&#x5C31;&#x66F4;&#x591A;&#x7684;&#x88AB;&#x63D0;&#x53CA;&#x3002;&#x4E00;&#x4EF6;&#x4E8B;&#x60C5;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5206;&#x6210;&#x591A;&#x4E2A;&#x6B65;&#x9AA4;&#xFF0C;&#x5728;&#x6CA1;&#x6709;&#x987A;&#x5E8F;&#x8981;&#x6C42;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4F7F;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x65E2;&#x80FD;&#x89E3;&#x51B3;&#x7EBF;&#x7A0B;&#x963B;&#x585E;&#x53C8;&#x80FD;&#x5145;&#x5206;&#x5229;&#x7528;&#x591A;&#x6838;&#x5904;&#x7406;&#x5668;&#x8FD0;&#x884C;&#x80FD;&#x529B;&#x3002;</p>
+<p>&#x200B;        &#x4E0B;&#x56FE;&#x53CD;&#x6620;&#x4E86;&#x4E00;&#x4E2A;&#x5305;&#x542B;8&#x4E2A;&#x64CD;&#x4F5C;&#x7684;&#x4EFB;&#x52A1;&#x5728;&#x4E00;&#x4E2A;&#x6709;&#x4E24;&#x6838;&#x5FC3;&#x7684;CPU&#x4E2D;&#x521B;&#x5EFA;&#x56DB;&#x4E2A;&#x7EBF;&#x7A0B;&#x8FD0;&#x884C;&#x7684;&#x60C5;&#x51B5;&#x3002;&#x5047;&#x8BBE;&#x6BCF;&#x4E2A;&#x6838;&#x5FC3;&#x6709;&#x4E24;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x90A3;&#x4E48;&#x6BCF;&#x4E2A;CPU&#x4E2D;&#x4E24;&#x4E2A;&#x7EBF;&#x7A0B;&#x4F1A;&#x4EA4;&#x66FF;&#x6267;&#x884C;&#xFF0C;&#x4E24;&#x4E2A;CPU&#x4E4B;&#x95F4;&#x7684;&#x64CD;&#x4F5C;&#x4F1A;&#x5E76;&#x884C;&#x8FD0;&#x7B97;&#x3002;&#x5355;&#x5C31;&#x4E00;&#x4E2A;CPU&#x800C;&#x8A00;&#x4E24;&#x4E2A;&#x7EBF;&#x7A0B;&#x53EF;&#x4EE5;&#x89E3;&#x51B3;&#x7EBF;&#x7A0B;&#x963B;&#x585E;&#x9020;&#x6210;&#x7684;&#x4E0D;&#x6D41;&#x7545;&#x95EE;&#x9898;&#xFF0C;&#x5176;&#x672C;&#x8EAB;&#x8FD0;&#x884C;&#x6548;&#x7387;&#x5E76;&#x6CA1;&#x6709;&#x63D0;&#x9AD8;&#xFF0C;&#x591A;CPU&#x7684;&#x5E76;&#x884C;&#x8FD0;&#x7B97;&#x624D;&#x771F;&#x6B63;&#x89E3;&#x51B3;&#x4E86;&#x8FD0;&#x884C;&#x6548;&#x7387;&#x95EE;&#x9898;&#xFF0C;&#x8FD9;&#x4E5F;&#x6B63;&#x662F;<strong>&#x5E76;&#x53D1;</strong>&#x548C;<strong>&#x5E76;&#x884C;</strong>&#x7684;&#x533A;&#x522B;&#x3002;&#x5F53;&#x7136;&#xFF0C;&#x4E0D;&#x7BA1;&#x662F;&#x591A;&#x6838;&#x8FD8;&#x662F;&#x5355;&#x6838;&#x5F00;&#x53D1;&#x4EBA;&#x5458;&#x4E0D;&#x7528;&#x8FC7;&#x591A;&#x7684;&#x62C5;&#x5FC3;&#xFF0C;&#x56E0;&#x4E3A;&#x4EFB;&#x52A1;&#x5177;&#x4F53;&#x5206;&#x914D;&#x7ED9;&#x51E0;&#x4E2A;CPU&#x8FD0;&#x7B97;&#x662F;&#x7531;&#x7CFB;&#x7EDF;&#x8C03;&#x5EA6;&#x7684;&#xFF0C;&#x5F00;&#x53D1;&#x4EBA;&#x5458;&#x4E0D;&#x7528;&#x8FC7;&#x591A;&#x5173;&#x5FC3;&#x7CFB;&#x7EDF;&#x6709;&#x51E0;&#x4E2A;CPU&#x3002;&#x5F00;&#x53D1;&#x4EBA;&#x5458;&#x9700;&#x8981;&#x5173;&#x5FC3;&#x7684;&#x662F;&#x7EBF;&#x7A0B;&#x4E4B;&#x95F4;&#x7684;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#xFF0C;&#x56E0;&#x4E3A;&#x6709;&#x4E9B;&#x64CD;&#x4F5C;&#x5FC5;&#x987B;&#x5728;&#x67D0;&#x4E2A;&#x64CD;&#x4F5C;&#x5B8C;&#x6210;&#x5B8C;&#x624D;&#x80FD;&#x6267;&#x884C;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x80FD;&#x4FDD;&#x8BC1;&#x8FD9;&#x4E2A;&#x987A;&#x5E8F;&#x52BF;&#x5FC5;&#x4F1A;&#x9020;&#x6210;&#x7A0B;&#x5E8F;&#x95EE;&#x9898;&#x3002;</p>
+<p><img src="image/6.png" alt="&#x591A;&#x7EBF;&#x7A0B;"></p>
+<h2 id="ios&#x591A;&#x7EBF;&#x7A0B;">iOS&#x591A;&#x7EBF;&#x7A0B;</h2>
+<p>&#x200B;        &#x5728;iOS&#x4E2D;&#x6BCF;&#x4E2A;&#x8FDB;&#x7A0B;&#x542F;&#x52A8;&#x540E;&#x90FD;&#x4F1A;&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;<strong>&#x4E3B;&#x7EBF;&#x7A0B;</strong>&#xFF08;UI&#x7EBF;&#x7A0B;&#xFF09;&#xFF0C;&#x8FD9;&#x4E2A;&#x7EBF;&#x7A0B;&#x662F;&#x5176;&#x4ED6;&#x7EBF;&#x7A0B;&#x7684;&#x7236;&#x7EBF;&#x7A0B;&#x3002;&#x7531;&#x4E8E;&#x5728;iOS&#x4E2D;&#x9664;&#x4E86;&#x4E3B;&#x7EBF;&#x7A0B;&#xFF0C;&#x5176;&#x4ED6;&#x5B50;&#x7EBF;&#x7A0B;&#x662F;&#x72EC;&#x7ACB;&#x4E8E;Cocoa Touch&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x53EA;&#x6709;&#x4E3B;&#x7EBF;&#x7A0B;&#x53EF;&#x4EE5;&#x66F4;&#x65B0;UI&#x754C;&#x9762;&#x3002;iOS&#x4E2D;&#x591A;&#x7EBF;&#x7A0B;&#x4F7F;&#x7528;&#x5E76;&#x4E0D;&#x590D;&#x6742;&#xFF0C;&#x5173;&#x952E;&#x662F;&#x5982;&#x4F55;&#x63A7;&#x5236;&#x597D;&#x5404;&#x4E2A;&#x7EBF;&#x7A0B;&#x7684;&#x6267;&#x884C;&#x987A;&#x5E8F;&#x3001;&#x5904;&#x7406;&#x597D;&#x8D44;&#x6E90;&#x7ADE;&#x4E89;&#x95EE;&#x9898;&#x3002;&#x5E38;&#x7528;&#x7684;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x6709;&#x4E09;&#x79CD;&#x65B9;&#x5F0F;&#xFF1A;</p>
+<ul>
+<li>1&#x3001;NSThread</li>
+<li>2&#x3001;NSOperation</li>
+<li>3&#x3001;GCD</li>
+</ul>
+<p>&#x4E09;&#x79CD;&#x65B9;&#x5F0F;&#x662F;&#x968F;&#x7740;iOS&#x7684;&#x53D1;&#x5C55;&#x9010;&#x6E10;&#x5F15;&#x5165;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x76F8;&#x6BD4;&#x800C;&#x8A00;&#x540E;&#x8005;&#x6BD4;&#x524D;&#x8005;&#x66F4;&#x52A0;&#x7B80;&#x5355;&#x6613;&#x7528;&#xFF0C;&#x5E76;&#x4E14;GCD&#x4E5F;&#x662F;&#x76EE;&#x524D;&#x82F9;&#x679C;&#x5B98;&#x65B9;&#x6BD4;&#x8F83;&#x63A8;&#x8350;&#x7684;&#x65B9;&#x5F0F;&#xFF08;&#x5B83;&#x5145;&#x5206;&#x5229;&#x7528;&#x4E86;&#x591A;&#x6838;&#x5904;&#x7406;&#x5668;&#x7684;&#x8FD0;&#x7B97;&#x6027;&#x80FD;&#xFF09;&#x3002;</p>
+<h4 id="nsthread">NSThread</h4>
+<p>NSThread&#x662F;&#x8F7B;&#x91CF;&#x7EA7;&#x7684;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#xFF0C;&#x4F7F;&#x7528;&#x8D77;&#x6765;&#x4E5F;&#x5E76;&#x4E0D;&#x590D;&#x6742;&#xFF0C;&#x4F46;&#x662F;&#x4F7F;&#x7528;NSThread&#x9700;&#x8981;&#x81EA;&#x5DF1;&#x7BA1;&#x7406;&#x7EBF;&#x7A0B;&#x751F;&#x547D;&#x5468;&#x671F;&#x3002;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5BF9;&#x8C61;&#x65B9;&#x6CD5;</p>
+<blockquote>
+<p>+(void)detachNewThreadSelector:(SEL)selector toTarget:(id)target withObject:(id)argument</p>
+</blockquote>
+<p>&#x76F4;&#x63A5;&#x5C06;&#x64CD;&#x4F5C;&#x6DFB;&#x52A0;&#x5230;&#x7EBF;&#x7A0B;&#x4E2D;&#x5E76;&#x542F;&#x52A8;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5BF9;&#x8C61;&#x65B9;&#x6CD5;</p>
+<blockquote>
+<p>-(instancetype)initWithTarget:(id)target selector:(SEL)selector object:(id)argument</p>
+</blockquote>
+<p>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x5BF9;&#x8C61;&#xFF0C;&#x7136;&#x540E;&#x8C03;&#x7528;start&#x65B9;&#x6CD5;&#x542F;&#x52A8;&#x7EBF;&#x7A0B;&#x3002;</p>
+<h6 id="&#x89E3;&#x51B3;&#x7EBF;&#x7A0B;&#x963B;&#x585E;&#x95EE;&#x9898;">&#x89E3;&#x51B3;&#x7EBF;&#x7A0B;&#x963B;&#x585E;&#x95EE;&#x9898;</h6>
+<p>&#x5728;&#x8D44;&#x6E90;&#x4E0B;&#x8F7D;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x7531;&#x4E8E;&#x7F51;&#x7EDC;&#x539F;&#x56E0;&#x6709;&#x65F6;&#x5019;&#x5F88;&#x96BE;&#x4FDD;&#x8BC1;&#x4E0B;&#x8F7D;&#x65F6;&#x95F4;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x4F7F;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x53EF;&#x80FD;&#x7528;&#x6237;&#x5B8C;&#x6210;&#x4E00;&#x4E2A;&#x4E0B;&#x8F7D;&#x64CD;&#x4F5C;&#x9700;&#x8981;&#x957F;&#x65F6;&#x95F4;&#x7684;&#x7B49;&#x5F85;&#xFF0C;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x4E2D;&#x65E0;&#x6CD5;&#x8FDB;&#x884C;&#x5176;&#x4ED6;&#x64CD;&#x4F5C;&#x3002;&#x4E0B;&#x9762;&#x6F14;&#x793A;&#x4E00;&#x4E2A;&#x91C7;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x4E0B;&#x8F7D;&#x56FE;&#x7247;&#x7684;&#x8FC7;&#x7A0B;&#xFF0C;&#x5728;&#x8FD9;&#x4E2A;&#x793A;&#x4F8B;&#x4E2D;&#x70B9;&#x51FB;&#x6309;&#x94AE;&#x4F1A;&#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x53BB;&#x4E0B;&#x8F7D;&#x56FE;&#x7247;&#xFF0C;&#x4E0B;&#x8F7D;&#x5B8C;&#x6210;&#x540E;&#x4F7F;&#x7528;UIImageView&#x5C06;&#x56FE;&#x7247;&#x663E;&#x793A;&#x5230;&#x754C;&#x9762;&#x4E2D;&#x3002;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x7528;&#x6237;&#x70B9;&#x51FB;&#x5B8C;&#x4E0B;&#x8F7D;&#x6309;&#x94AE;&#x540E;&#xFF0C;&#x4E0D;&#x7BA1;&#x56FE;&#x7247;&#x662F;&#x5426;&#x4E0B;&#x8F7D;&#x5B8C;&#x6210;&#x90FD;&#x53EF;&#x4EE5;&#x7EE7;&#x7EED;&#x64CD;&#x4F5C;&#x754C;&#x9762;&#xFF0C;&#x4E0D;&#x4F1A;&#x9020;&#x6210;&#x963B;&#x585E;&#x3002;</p>
+<pre><code class="lang-objective-c">//
+//  NSThread&#x5B9E;&#x73B0;&#x591A;&#x7EBF;&#x7A0B;
+//  MultiThread
+//
+//  Created by Kenshin Cui on 14-3-22.
+//  Copyright (c) 2014&#x5E74; Kenshin Cui. All rights reserved.
+//
+
+#import &quot;KCMainViewController.h&quot;
+
+@interface KCMainViewController (){
+    UIImageView *_imageView;
+}
+
+@end
+
+@implementation KCMainViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    [self layoutUI];
+}
+
+#pragma mark &#x754C;&#x9762;&#x5E03;&#x5C40;
+-(void)layoutUI{
+    _imageView =[[UIImageView alloc]initWithFrame:[UIScreen mainScreen].applicationFrame];
+    _imageView.contentMode=UIViewContentModeScaleAspectFit;
+    [self.view addSubview:_imageView];
+
+    UIButton *button=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button.frame=CGRectMake(50, 500, 220, 25);
+    [button setTitle:@&quot;&#x52A0;&#x8F7D;&#x56FE;&#x7247;&quot; forState:UIControlStateNormal];
+    //&#x6DFB;&#x52A0;&#x65B9;&#x6CD5;
+    [button addTarget:self action:@selector(loadImageWithMultiThread) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
+}
+
+#pragma mark &#x5C06;&#x56FE;&#x7247;&#x663E;&#x793A;&#x5230;&#x754C;&#x9762;
+-(void)updateImage:(NSData *)imageData{
+    UIImage *image=[UIImage imageWithData:imageData];
+    _imageView.image=image;
+}
+
+#pragma mark &#x8BF7;&#x6C42;&#x56FE;&#x7247;&#x6570;&#x636E;
+-(NSData *)requestData{
+    //&#x5BF9;&#x4E8E;&#x591A;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x5EFA;&#x8BAE;&#x628A;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x653E;&#x5230;@autoreleasepool&#x4E2D;
+    @autoreleasepool {
+        NSURL *url=[NSURL URLWithString:@&quot;http://images.apple.com/iphone-6/overview/images/biggest_right_large.png&quot;];
+        NSData *data=[NSData dataWithContentsOfURL:url];
+        return data;
+    }
+}
+
+#pragma mark &#x52A0;&#x8F7D;&#x56FE;&#x7247;
+-(void)loadImage{
+    //&#x8BF7;&#x6C42;&#x6570;&#x636E;
+    NSData *data= [self requestData];
+    /*&#x5C06;&#x6570;&#x636E;&#x663E;&#x793A;&#x5230;UI&#x63A7;&#x4EF6;,&#x6CE8;&#x610F;&#x53EA;&#x80FD;&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E2D;&#x66F4;&#x65B0;UI,
+     &#x53E6;&#x5916;performSelectorOnMainThread&#x65B9;&#x6CD5;&#x662F;NSObject&#x7684;&#x5206;&#x7C7B;&#x65B9;&#x6CD5;&#xFF0C;&#x6BCF;&#x4E2A;NSObject&#x5BF9;&#x8C61;&#x90FD;&#x6709;&#x6B64;&#x65B9;&#x6CD5;&#xFF0C;
+     &#x5B83;&#x8C03;&#x7528;&#x7684;selector&#x65B9;&#x6CD5;&#x662F;&#x5F53;&#x524D;&#x8C03;&#x7528;&#x63A7;&#x4EF6;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x4F8B;&#x5982;&#x4F7F;&#x7528;UIImageView&#x8C03;&#x7528;&#x7684;&#x65F6;&#x5019;selector&#x5C31;&#x662F;UIImageView&#x7684;&#x65B9;&#x6CD5;
+     Object&#xFF1A;&#x4EE3;&#x8868;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x7684;&#x53C2;&#x6570;,&#x4E0D;&#x8FC7;&#x53EA;&#x80FD;&#x4F20;&#x9012;&#x4E00;&#x4E2A;&#x53C2;&#x6570;(&#x5982;&#x679C;&#x6709;&#x591A;&#x4E2A;&#x53C2;&#x6570;&#x8BF7;&#x4F7F;&#x7528;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x5C01;&#x88C5;)
+     waitUntilDone:&#x662F;&#x5426;&#x7EBF;&#x7A0B;&#x4EFB;&#x52A1;&#x5B8C;&#x6210;&#x6267;&#x884C;
+    */
+    [self performSelectorOnMainThread:@selector(updateImage:) withObject:data waitUntilDone:YES];
+}
+
+#pragma mark &#x591A;&#x7EBF;&#x7A0B;&#x4E0B;&#x8F7D;&#x56FE;&#x7247;
+-(void)loadImageWithMultiThread{
+    //&#x65B9;&#x6CD5;1&#xFF1A;&#x4F7F;&#x7528;&#x5BF9;&#x8C61;&#x65B9;&#x6CD5;
+    //&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x662F;&#x8BF7;&#x6C42;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#x662F;&#x64CD;&#x4F5C;&#x65B9;&#x6CD5;&#x7684;&#x53C2;&#x6570;
+//    NSThread *thread=[[NSThread alloc]initWithTarget:self selector:@selector(loadImage) object:nil];
+//    //&#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x6CE8;&#x610F;&#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x5E76;&#x975E;&#x5C31;&#x4E00;&#x5B9A;&#x7ACB;&#x5373;&#x6267;&#x884C;&#xFF0C;&#x800C;&#x662F;&#x5904;&#x4E8E;&#x5C31;&#x7EEA;&#x72B6;&#x6001;&#xFF0C;&#x5F53;&#x7CFB;&#x7EDF;&#x8C03;&#x5EA6;&#x65F6;&#x624D;&#x771F;&#x6B63;&#x6267;&#x884C;
+//    [thread start];
+
+    //&#x65B9;&#x6CD5;2&#xFF1A;&#x4F7F;&#x7528;&#x7C7B;&#x65B9;&#x6CD5;
+    [NSThread detachNewThreadSelector:@selector(loadImage) toTarget:self withObject:nil];
+}
+@end
+</code></pre>
+<p>&#x8FD0;&#x884C;&#x6548;&#x679C;&#xFF1A;</p>
+<p><img src="image/7.png" alt="NSThreadEffect"></p>
+<p>&#x7A0B;&#x5E8F;&#x6BD4;&#x8F83;&#x7B80;&#x5355;&#xFF0C;&#x4F46;&#x662F;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x6267;&#x884C;&#x6B65;&#x9AA4;&#xFF1A;&#x5F53;&#x70B9;&#x51FB;&#x4E86;&#x201C;&#x52A0;&#x8F7D;&#x56FE;&#x7247;&#x201D;&#x6309;&#x94AE;&#x540E;&#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7EBF;&#x7A0B;&#xFF0C;&#x8FD9;&#x4E2A;&#x7EBF;&#x7A0B;&#x5728;&#x6F14;&#x793A;&#x4E2D;&#x5927;&#x6982;&#x7528;&#x4E86;5s&#x5DE6;&#x53F3;&#xFF0C;&#x5728;&#x8FD9;5s&#x5185;UI&#x7EBF;&#x7A0B;&#x662F;&#x4E0D;&#x4F1A;&#x963B;&#x585E;&#x7684;&#xFF0C;&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x5176;&#x4ED6;&#x64CD;&#x4F5C;&#xFF0C;&#x5927;&#x7EA6;5s&#x4E4B;&#x540E;&#x56FE;&#x7247;&#x4E0B;&#x8F7D;&#x5B8C;&#x6210;&#xFF0C;&#x6B64;&#x65F6;&#x8C03;&#x7528;UI&#x7EBF;&#x7A0B;&#x5C06;&#x56FE;&#x7247;&#x663E;&#x793A;&#x5230;&#x754C;&#x9762;&#x4E2D;&#xFF08;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x77AC;&#x95F4;&#x5B8C;&#x6210;&#xFF09;&#x3002;&#x53E6;&#x5916;&#x524D;&#x9762;&#x4E5F;&#x63D0;&#x5230;&#x8FC7;&#xFF0C;&#x66F4;&#x65B0;UI&#x7684;&#x65F6;&#x5019;&#x4F7F;&#x7528;UI&#x7EBF;&#x7A0B;&#xFF0C;&#x8FD9;&#x91CC;&#x8C03;&#x7528;&#x4E86;NSObject&#x7684;&#x5206;&#x7C7B;&#x6269;&#x5C55;&#x65B9;&#x6CD5;&#xFF0C;&#x8C03;&#x7528;UI&#x7EBF;&#x7A0B;&#x5B8C;&#x6210;&#x66F4;&#x65B0;&#x3002;</p>
+<h5 id="&#x6269;&#x5C55;--nsobject&#x5206;&#x7C7B;&#x6269;&#x5C55;&#x65B9;&#x6CD5;">&#x6269;&#x5C55;--NSObject&#x5206;&#x7C7B;&#x6269;&#x5C55;&#x65B9;&#x6CD5;</h5>
+<p>&#x4E3A;&#x4E86;&#x7B80;&#x5316;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x8FC7;&#x7A0B;&#xFF0C;&#x82F9;&#x679C;&#x5B98;&#x65B9;&#x5BF9;NSObject&#x8FDB;&#x884C;&#x5206;&#x7C7B;&#x6269;&#x5C55;(&#x672C;&#x8D28;&#x8FD8;&#x662F;&#x521B;&#x5EFA;NSThread)&#xFF0C;&#x5BF9;&#x4E8E;&#x7B80;&#x5355;&#x7684;&#x591A;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x4F7F;&#x7528;&#x8FD9;&#x4E9B;&#x6269;&#x5C55;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>-(void)performSelectorInBackground:(SEL)aSelector withObject:(id)arg&#xFF1A;</p>
+</blockquote>
+<p>&#x5728;&#x540E;&#x53F0;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#xFF0C;&#x672C;&#x8D28;&#x5C31;&#x662F;&#x91CD;&#x65B0;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x5F53;&#x524D;&#x65B9;&#x6CD5;&#x3002;</p>
+<blockquote>
+<p>-(void)performSelector:(SEL)aSelector onThread:(NSThread *)thr withObject:(id)arg waitUntilDone:(BOOL)wait</p>
+</blockquote>
+<p>&#x5728;&#x6307;&#x5B9A;&#x7684;&#x7EBF;&#x7A0B;&#x4E0A;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x9700;&#x8981;&#x7528;&#x6237;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x5BF9;&#x8C61;&#x3002;</p>
+<blockquote>
+<p>-(void)performSelectorOnMainThread:(SEL)aSelector withObject:(id)arg waitUntilDone:(BOOL)wait</p>
+</blockquote>
+<p>&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E0A;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;</p>
+<h2 id="nsoperation">NSOperation</h2>
+<p>&#x4F7F;&#x7528;NSOperation&#x548C;NSOperationQueue&#x8FDB;&#x884C;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x7C7B;&#x4F3C;&#x4E8E;C#&#x4E2D;&#x7684;&#x7EBF;&#x7A0B;&#x6C60;&#xFF0C;&#x53EA;&#x8981;&#x5C06;&#x4E00;&#x4E2A;NSOperation&#xFF08;&#x5B9E;&#x9645;&#x5F00;&#x4E2D;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x5176;&#x5B50;&#x7C7B;NSInvocationOperation&#x3001;NSBlockOperation&#xFF09;&#x653E;&#x5230;NSOperationQueue&#x8FD9;&#x4E2A;&#x961F;&#x5217;&#x4E2D;&#x7EBF;&#x7A0B;&#x5C31;&#x4F1A;&#x4F9D;&#x6B21;&#x542F;&#x52A8;&#x3002;NSOperationQueue&#x8D1F;&#x8D23;&#x7BA1;&#x7406;&#x3001;&#x6267;&#x884C;&#x6240;&#x6709;&#x7684;NSOperation&#xFF0C;&#x5728;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x4E2D;&#x53EF;&#x4EE5;&#x66F4;&#x52A0;&#x5BB9;&#x6613;&#x7684;&#x7BA1;&#x7406;&#x7EBF;&#x7A0B;&#x603B;&#x6570;&#x548C;&#x63A7;&#x5236;&#x7EBF;&#x7A0B;&#x4E4B;&#x95F4;&#x7684;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#x3002;</p>
+<p>NSOperation&#x6709;&#x4E24;&#x4E2A;&#x5E38;&#x7528;&#x5B50;&#x7C7B;&#x7528;&#x4E8E;&#x521B;&#x5EFA;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#xFF1A;NSInvocationOperation&#x548C;NSBlockOperation&#xFF0C;&#x4E24;&#x79CD;&#x65B9;&#x5F0F;&#x672C;&#x8D28;&#x6CA1;&#x6709;&#x533A;&#x522B;&#xFF0C;&#x4F46;&#x662F;&#x662F;&#x540E;&#x8005;&#x4F7F;&#x7528;Block&#x5F62;&#x5F0F;&#x8FDB;&#x884C;&#x4EE3;&#x7801;&#x7EC4;&#x7EC7;&#xFF0C;&#x4F7F;&#x7528;&#x76F8;&#x5BF9;&#x65B9;&#x4FBF;&#x3002;</p>
+<h4 id="nsinvocationoperation">NSInvocationOperation</h4>
+<p>&#x9996;&#x5148;&#x4F7F;&#x7528;NSInvocationOperation&#x8FDB;&#x884C;&#x4E00;&#x5F20;&#x56FE;&#x7247;&#x7684;&#x52A0;&#x8F7D;&#x6F14;&#x793A;&#xFF0C;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;&#x5C31;&#x662F;&#xFF1A;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#xFF0C;&#x5728;&#x8FD9;&#x4E2A;&#x64CD;&#x4F5C;&#x4E2D;&#x6307;&#x5B9A;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x548C;&#x53C2;&#x6570;&#xFF0C;&#x7136;&#x540E;&#x52A0;&#x5165;&#x5230;&#x64CD;&#x4F5C;&#x961F;&#x5217;&#x3002;&#x5176;&#x4ED6;&#x4EE3;&#x7801;&#x57FA;&#x672C;&#x4E0D;&#x7528;&#x4FEE;&#x6539;&#xFF0C;&#x76F4;&#x63A5;&#x4FEE;&#x52A0;&#x8F7D;&#x56FE;&#x7247;&#x65B9;&#x6CD5;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-objective-c">-(void)loadImageWithMultiThread{
+    /*&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x8C03;&#x7528;&#x64CD;&#x4F5C;
+     object:&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x53C2;&#x6570;
+    */
+    NSInvocationOperation *invocationOperation=[[NSInvocationOperation alloc]initWithTarget:self selector:@selector(loadImage) object:nil];
+    //&#x521B;&#x5EFA;&#x5B8C;NSInvocationOperation&#x5BF9;&#x8C61;&#x5E76;&#x4E0D;&#x4F1A;&#x8C03;&#x7528;&#xFF0C;&#x5B83;&#x7531;&#x4E00;&#x4E2A;start&#x65B9;&#x6CD5;&#x542F;&#x52A8;&#x64CD;&#x4F5C;&#xFF0C;&#x4F46;&#x662F;&#x6CE8;&#x610F;&#x5982;&#x679C;&#x76F4;&#x63A5;&#x8C03;&#x7528;start&#x65B9;&#x6CD5;&#xFF0C;&#x5219;&#x6B64;&#x64CD;&#x4F5C;&#x4F1A;&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E2D;&#x8C03;&#x7528;&#xFF0C;&#x4E00;&#x822C;&#x4E0D;&#x4F1A;&#x8FD9;&#x4E48;&#x64CD;&#x4F5C;,&#x800C;&#x662F;&#x6DFB;&#x52A0;&#x5230;NSOperationQueue&#x4E2D;
+//    [invocationOperation start];
+
+    //&#x521B;&#x5EFA;&#x64CD;&#x4F5C;&#x961F;&#x5217;
+    NSOperationQueue *operationQueue=[[NSOperationQueue alloc]init];
+    //&#x6CE8;&#x610F;&#x6DFB;&#x52A0;&#x5230;&#x64CD;&#x4F5C;&#x961F;&#x540E;&#xFF0C;&#x961F;&#x5217;&#x4F1A;&#x5F00;&#x542F;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x6B64;&#x64CD;&#x4F5C;
+    [operationQueue addOperation:invocationOperation];
+}
+</code></pre>
+<h4 id="nsblockoperation">NSBlockOperation</h4>
+<p>&#x4E0B;&#x9762;&#x91C7;&#x7528;NSBlockOperation&#x521B;&#x5EFA;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x52A0;&#x8F7D;&#x56FE;&#x7247;&#x3002;</p>
+<pre><code class="lang-objective-c">#pragma mark &#x591A;&#x7EBF;&#x7A0B;&#x4E0B;&#x8F7D;&#x56FE;&#x7247;
+-(void)loadImageWithMultiThread{
+    int count=ROW_COUNT*COLUMN_COUNT;
+    //&#x521B;&#x5EFA;&#x64CD;&#x4F5C;&#x961F;&#x5217;
+    NSOperationQueue *operationQueue=[[NSOperationQueue alloc]init];
+    operationQueue.maxConcurrentOperationCount=5;//&#x8BBE;&#x7F6E;&#x6700;&#x5927;&#x5E76;&#x53D1;&#x7EBF;&#x7A0B;&#x6570;
+    //&#x521B;&#x5EFA;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x7528;&#x4E8E;&#x586B;&#x5145;&#x56FE;&#x7247;
+    for (int i=0; i&amp;lt;count; ++i){
+        //&#x65B9;&#x6CD5;1&#xFF1A;&#x521B;&#x5EFA;&#x64CD;&#x4F5C;&#x5757;&#x6DFB;&#x52A0;&#x5230;&#x961F;&#x5217;
+//        //&#x521B;&#x5EFA;&#x591A;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;
+//        NSBlockOperation *blockOperation=[NSBlockOperation blockOperationWithBlock:^{
+//            [self loadImage:[NSNumber numberWithInt:i]];
+//        }];
+//        //&#x521B;&#x5EFA;&#x64CD;&#x4F5C;&#x961F;&#x5217;
+//
+//        [operationQueue addOperation:blockOperation];
+
+        //&#x65B9;&#x6CD5;2&#xFF1A;&#x76F4;&#x63A5;&#x4F7F;&#x7528;&#x64CD;&#x961F;&#x5217;&#x6DFB;&#x52A0;&#x64CD;&#x4F5C;
+        [operationQueue addOperationWithBlock:^{
+            [self loadImage:[NSNumber numberWithInt:i]];
+        }];
+    }
+}
+</code></pre>
+<p>&#x5BF9;&#x6BD4;&#x4E4B;&#x524D;NSThread&#x52A0;&#x8F7D;&#x5F20;&#x56FE;&#x7247;&#x5F88;&#x53D1;&#x73B0;&#x6838;&#x5FC3;&#x4EE3;&#x7801;&#x7B80;&#x5316;&#x4E86;&#x4E0D;&#x5C11;&#xFF0C;&#x8FD9;&#x91CC;&#x7740;&#x91CD;&#x5F3A;&#x8C03;&#x4E24;&#x70B9;&#xFF1A;</p>
+<ul>
+<li>&#x4F7F;&#x7528;NSBlockOperation&#x65B9;&#x6CD5;&#xFF0C;&#x6240;&#x6709;&#x7684;&#x64CD;&#x4F5C;&#x4E0D;&#x5FC5;&#x5355;&#x72EC;&#x5B9A;&#x4E49;&#x65B9;&#x6CD5;&#xFF0C;&#x540C;&#x65F6;&#x89E3;&#x51B3;&#x4E86;&#x53EA;&#x80FD;&#x4F20;&#x9012;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x95EE;&#x9898;&#x3002;</li>
+<li>&#x8C03;&#x7528;&#x4E3B;&#x7EBF;&#x7A0B;&#x961F;&#x5217;&#x7684;addOperationWithBlock:&#x65B9;&#x6CD5;&#x8FDB;&#x884C;UI&#x66F4;&#x65B0;&#xFF0C;&#x4E0D;&#x7528;&#x518D;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x5B9E;&#x4F53;&#xFF08;&#x4E4B;&#x524D;&#x5FC5;&#x987B;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;KCImageData&#x89E3;&#x51B3;&#x53EA;&#x80FD;&#x4F20;&#x9012;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x95EE;&#x9898;&#xFF09;&#x3002;</li>
+<li>&#x4F7F;&#x7528;NSOperation&#x8FDB;&#x884C;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x53EF;&#x4EE5;&#x8BBE;&#x7F6E;&#x6700;&#x5927;&#x5E76;&#x53D1;&#x7EBF;&#x7A0B;&#xFF0C;&#x6709;&#x6548;&#x7684;&#x5BF9;&#x7EBF;&#x7A0B;&#x8FDB;&#x884C;&#x4E86;&#x63A7;&#x5236;&#xFF08;&#x4E0A;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x8FD0;&#x884C;&#x8D77;&#x6765;&#x4F60;&#x4F1A;&#x53D1;&#x73B0;&#x6253;&#x5370;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x65F6;&#x53EA;&#x6709;&#x6709;&#x9650;&#x7684;&#x7EBF;&#x7A0B;&#x88AB;&#x521B;&#x5EFA;&#xFF0C;&#x5982;&#x4E0A;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x8BBE;&#x7F6E;&#x6700;&#x5927;&#x7EBF;&#x7A0B;&#x6570;&#x4E3A;5&#xFF0C;&#x5219;&#x56FE;&#x7247;&#x57FA;&#x672C;&#x4E0A;&#x662F;&#x4E94;&#x4E2A;&#x4E00;&#x6B21;&#x52A0;&#x8F7D;&#x7684;&#xFF09;&#x3002;</li>
+</ul>
+<h4 id="&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x987A;&#x5E8F;">&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x987A;&#x5E8F;</h4>
+<p>&#x524D;&#x9762;&#x4F7F;&#x7528;NSThread&#x5F88;&#x96BE;&#x63A7;&#x5236;&#x7EBF;&#x7A0B;&#x7684;&#x6267;&#x884C;&#x987A;&#x5E8F;&#xFF0C;&#x4F46;&#x662F;&#x4F7F;&#x7528;NSOperation&#x5C31;&#x5BB9;&#x6613;&#x591A;&#x4E86;&#xFF0C;&#x6BCF;&#x4E2A;NSOperation&#x53EF;&#x4EE5;&#x8BBE;&#x7F6E;&#x4F9D;&#x8D56;&#x7EBF;&#x7A0B;&#x3002;&#x5047;&#x8BBE;&#x64CD;&#x4F5C;A&#x4F9D;&#x8D56;&#x4E8E;&#x64CD;&#x4F5C;B&#xFF0C;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x961F;&#x5217;&#x5728;&#x542F;&#x52A8;&#x7EBF;&#x7A0B;&#x65F6;&#x5C31;&#x4F1A;&#x9996;&#x5148;&#x6267;&#x884C;B&#x64CD;&#x4F5C;&#xFF0C;&#x7136;&#x540E;&#x6267;&#x884C;A&#x3002;&#x5BF9;&#x4E8E;&#x524D;&#x9762;&#x4F18;&#x5148;&#x52A0;&#x8F7D;&#x6700;&#x540E;&#x4E00;&#x5F20;&#x56FE;&#x7684;&#x9700;&#x6C42;&#xFF0C;&#x53EA;&#x8981;&#x8BBE;&#x7F6E;&#x524D;&#x9762;&#x7684;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x7684;&#x4F9D;&#x8D56;&#x7EBF;&#x7A0B;&#x4E3A;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x5373;&#x53EF;&#x3002;&#x4FEE;&#x6539;&#x56FE;&#x7247;&#x52A0;&#x8F7D;&#x65B9;&#x6CD5;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-objective-c">-(void)loadImageWithMultiThread{
+    int count=ROW_COUNT*COLUMN_COUNT;
+    //&#x521B;&#x5EFA;&#x64CD;&#x4F5C;&#x961F;&#x5217;
+    NSOperationQueue *operationQueue=[[NSOperationQueue alloc]init];
+    operationQueue.maxConcurrentOperationCount=5;//&#x8BBE;&#x7F6E;&#x6700;&#x5927;&#x5E76;&#x53D1;&#x7EBF;&#x7A0B;&#x6570;
+
+    NSBlockOperation *lastBlockOperation=[NSBlockOperation blockOperationWithBlock:^{
+        [self loadImage:[NSNumber numberWithInt:(count-1)]];
+    }];
+    //&#x521B;&#x5EFA;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x7528;&#x4E8E;&#x586B;&#x5145;&#x56FE;&#x7247;
+    for (int i=0; i&amp;lt;count-1; ++i) {
+        //&#x65B9;&#x6CD5;1&#xFF1A;&#x521B;&#x5EFA;&#x64CD;&#x4F5C;&#x5757;&#x6DFB;&#x52A0;&#x5230;&#x961F;&#x5217;
+        //&#x521B;&#x5EFA;&#x591A;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;
+        NSBlockOperation *blockOperation=[NSBlockOperation blockOperationWithBlock:^{
+            [self loadImage:[NSNumber numberWithInt:i]];
+        }];
+        //&#x8BBE;&#x7F6E;&#x4F9D;&#x8D56;&#x64CD;&#x4F5C;&#x4E3A;&#x6700;&#x540E;&#x4E00;&#x5F20;&#x56FE;&#x7247;&#x52A0;&#x8F7D;&#x64CD;&#x4F5C;
+        [blockOperation addDependency:lastBlockOperation];
+
+        [operationQueue addOperation:blockOperation];
+
+    }
+    //&#x5C06;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x56FE;&#x7247;&#x7684;&#x52A0;&#x8F7D;&#x64CD;&#x4F5C;&#x52A0;&#x5165;&#x7EBF;&#x7A0B;&#x961F;&#x5217;
+    [operationQueue addOperation:lastBlockOperation];
+}
+</code></pre>
+<h2 id="gcd">GCD</h2>
+<p>GCD(Grand Central Dispatch)&#x662F;&#x57FA;&#x4E8E;C&#x8BED;&#x8A00;&#x5F00;&#x53D1;&#x7684;&#x4E00;&#x5957;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x673A;&#x5236;&#xFF0C;&#x4E5F;&#x662F;&#x76EE;&#x524D;&#x82F9;&#x679C;&#x5B98;&#x65B9;&#x63A8;&#x8350;&#x7684;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x65B9;&#x6CD5;&#x3002;&#x524D;&#x9762;&#x4E5F;&#x8BF4;&#x8FC7;&#x4E09;&#x79CD;&#x5F00;&#x53D1;&#x4E2D;GCD&#x62BD;&#x8C61;&#x5C42;&#x6B21;&#x6700;&#x9AD8;&#xFF0C;&#x5F53;&#x7136;&#x662F;&#x7528;&#x8D77;&#x6765;&#x4E5F;&#x6700;&#x7B80;&#x5355;&#xFF0C;&#x53EA;&#x662F;&#x5B83;&#x57FA;&#x4E8E;C&#x8BED;&#x8A00;&#x5F00;&#x53D1;&#xFF0C;&#x5E76;&#x4E0D;&#x50CF;NSOperation&#x662F;&#x9762;&#x5411;&#x5BF9;&#x8C61;&#x7684;&#x5F00;&#x53D1;&#xFF0C;&#x800C;&#x662F;&#x5B8C;&#x5168;&#x9762;&#x5411;&#x8FC7;&#x7A0B;&#x7684;&#x3002;&#x5BF9;&#x4E8E;&#x719F;&#x6089;C#&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x7684;&#x670B;&#x53CB;&#x5BF9;&#x4E8E;GCD&#x5B66;&#x4E60;&#x8D77;&#x6765;&#x5E94;&#x8BE5;&#x5F88;&#x5FEB;&#xFF0C;&#x56E0;&#x4E3A;&#x5B83;&#x4E0E;C#&#x4E2D;&#x7684;&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x57FA;&#x672C;&#x662F;&#x4E00;&#x6837;&#x7684;&#x3002;&#x8FD9;&#x79CD;&#x673A;&#x5236;&#x76F8;&#x6BD4;&#x8F83;&#x4E8E;&#x524D;&#x9762;&#x4E24;&#x79CD;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x65B9;&#x5F0F;&#x6700;&#x663E;&#x8457;&#x7684;&#x4F18;&#x70B9;&#x5C31;&#x662F;&#x5B83;&#x5BF9;&#x4E8E;&#x591A;&#x6838;&#x8FD0;&#x7B97;&#x66F4;&#x52A0;&#x6709;&#x6548;&#x3002;</p>
+<p>GCD&#x4E2D;&#x4E5F;&#x6709;&#x4E00;&#x4E2A;&#x7C7B;&#x4F3C;&#x4E8E;NSOperationQueue&#x7684;&#x961F;&#x5217;&#xFF0C;GCD&#x7EDF;&#x4E00;&#x7BA1;&#x7406;&#x6574;&#x4E2A;&#x961F;&#x5217;&#x4E2D;&#x7684;&#x4EFB;&#x52A1;&#x3002;&#x4F46;&#x662F;GCD&#x4E2D;&#x7684;&#x961F;&#x5217;&#x5206;&#x4E3A;&#x5E76;&#x884C;&#x961F;&#x5217;&#x548C;&#x4E32;&#x884C;&#x961F;&#x5217;&#x4E24;&#x7C7B;&#xFF1A;</p>
+<ul>
+<li>&#x4E32;&#x884C;&#x961F;&#x5217;&#xFF1A;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x52A0;&#x5165;&#x5230;&#x961F;&#x5217;&#x4E2D;&#x7684;&#x64CD;&#x4F5C;&#x6309;&#x6DFB;&#x52A0;&#x987A;&#x5E8F;&#x4F9D;&#x6B21;&#x6267;&#x884C;&#x3002;</li>
+<li>&#x5E76;&#x53D1;&#x961F;&#x5217;&#xFF1A;&#x6709;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x64CD;&#x4F5C;&#x8FDB;&#x6765;&#x4E4B;&#x540E;&#x5B83;&#x4F1A;&#x5C06;&#x8FD9;&#x4E9B;&#x961F;&#x5217;&#x5B89;&#x6392;&#x5728;&#x53EF;&#x7528;&#x7684;&#x5904;&#x7406;&#x5668;&#x4E0A;&#xFF0C;&#x540C;&#x65F6;&#x4FDD;&#x8BC1;&#x5148;&#x8FDB;&#x6765;&#x7684;&#x4EFB;&#x52A1;&#x4F18;&#x5148;&#x5904;&#x7406;&#x3002;</li>
+</ul>
+<p>&#x5176;&#x5B9E;&#x5728;GCD&#x4E2D;&#x8FD8;&#x6709;&#x4E00;&#x4E2A;&#x7279;&#x6B8A;&#x961F;&#x5217;&#x5C31;&#x662F;&#x4E3B;&#x961F;&#x5217;&#xFF0C;&#x7528;&#x6765;&#x6267;&#x884C;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E0A;&#x7684;&#x64CD;&#x4F5C;&#x4EFB;&#x52A1;&#xFF08;&#x4ECE;&#x524D;&#x9762;&#x7684;&#x6F14;&#x793A;&#x4E2D;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5176;&#x5B9E;&#x5728;NSOperation&#x4E2D;&#x4E5F;&#x6709;&#x4E00;&#x4E2A;&#x4E3B;&#x961F;&#x5217;&#xFF09;&#x3002;</p>
+<h4 id="&#x4E32;&#x884C;&#x961F;&#x5217;">&#x4E32;&#x884C;&#x961F;&#x5217;</h4>
+<p>&#x4F7F;&#x7528;&#x4E32;&#x884C;&#x961F;&#x5217;&#x65F6;&#x9996;&#x5148;&#x8981;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E32;&#x884C;&#x961F;&#x5217;&#xFF0C;&#x7136;&#x540E;&#x8C03;&#x7528;&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#xFF0C;&#x5728;&#x6B64;&#x65B9;&#x6CD5;&#x4E2D;&#x4F20;&#x5165;&#x4E32;&#x884C;&#x961F;&#x5217;&#x548C;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x5373;&#x53EF;&#x81EA;&#x52A8;&#x6267;&#x884C;&#x3002;&#x4E0B;&#x9762;&#x4F7F;&#x7528;&#x7EBF;&#x7A0B;&#x961F;&#x5217;&#x6F14;&#x793A;&#x56FE;&#x7247;&#x7684;&#x52A0;&#x8F7D;&#x8FC7;&#x7A0B;&#xFF0C;&#x4F60;&#x4F1A;&#x53D1;&#x73B0;&#x591A;&#x5F20;&#x56FE;&#x7247;&#x4F1A;&#x6309;&#x987A;&#x5E8F;&#x52A0;&#x8F7D;&#xFF0C;&#x56E0;&#x4E3A;&#x5F53;&#x524D;&#x961F;&#x5217;&#x4E2D;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x3002;</p>
+<pre><code class="lang-objective-c">#pragma mark &#x591A;&#x7EBF;&#x7A0B;&#x4E0B;&#x8F7D;&#x56FE;&#x7247;
+-(void)loadImageWithMultiThread{
+    int count=ROW_COUNT*COLUMN_COUNT;
+
+    /*&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E32;&#x884C;&#x961F;&#x5217;
+     &#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#xFF1A;&#x961F;&#x5217;&#x540D;&#x79F0;
+     &#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#xFF1A;&#x961F;&#x5217;&#x7C7B;&#x578B;
+    */
+    dispatch_queue_t serialQueue=dispatch_queue_create(&quot;myThreadQueue1&quot;, DISPATCH_QUEUE_SERIAL);//&#x6CE8;&#x610F;queue&#x5BF9;&#x8C61;&#x4E0D;&#x662F;&#x6307;&#x9488;&#x7C7B;&#x578B;
+    //&#x521B;&#x5EFA;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x7528;&#x4E8E;&#x586B;&#x5145;&#x56FE;&#x7247;
+    for (int i=0; i&amp;lt;count; ++i) {
+        //&#x5F02;&#x6B65;&#x6267;&#x884C;&#x961F;&#x5217;&#x4EFB;&#x52A1;
+        dispatch_async(serialQueue, ^{
+            [self loadImage:[NSNumber numberWithInt:i]];
+        });
+
+    }
+    //&#x975E;ARC&#x73AF;&#x5883;&#x8BF7;&#x91CA;&#x653E;
+//    dispatch_release(seriQueue);
+}
+</code></pre>
+<p>&#x5728;&#x4E0A;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x4E2D;&#x66F4;&#x65B0;UI&#x8FD8;&#x4F7F;&#x7528;&#x4E86;GCD&#x65B9;&#x6CD5;&#x7684;&#x4E3B;&#x7EBF;&#x7A0B;&#x961F;&#x5217;dispatch_get_main_queue()&#xFF0C;&#x5176;&#x5B9E;&#x8FD9;&#x4E0E;&#x524D;&#x9762;&#x4E24;&#x79CD;&#x4E3B;&#x7EBF;&#x7A0B;&#x66F4;&#x65B0;UI&#x6CA1;&#x6709;&#x672C;&#x8D28;&#x7684;&#x533A;&#x522B;&#x3002;</p>
+<h4 id="&#x5E76;&#x53D1;&#x961F;&#x5217;">&#x5E76;&#x53D1;&#x961F;&#x5217;</h4>
+<p>&#x5E76;&#x53D1;&#x961F;&#x5217;&#x540C;&#x6837;&#x662F;&#x4F7F;&#x7528;dispatch_queue_create()&#x65B9;&#x6CD5;&#x521B;&#x5EFA;&#xFF0C;&#x53EA;&#x662F;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x6307;&#x5B9A;&#x4E3A;DISPATCH_QUEUE_CONCURRENT&#x8FDB;&#x884C;&#x521B;&#x5EFA;&#xFF0C;&#x4F46;&#x662F;&#x5728;&#x5B9E;&#x9645;&#x5F00;&#x53D1;&#x4E2D;&#x6211;&#x4EEC;&#x901A;&#x5E38;&#x4E0D;&#x4F1A;&#x91CD;&#x65B0;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5E76;&#x53D1;&#x961F;&#x5217;&#x800C;&#x662F;&#x4F7F;&#x7528;dispatch_get_global_queue()&#x65B9;&#x6CD5;&#x53D6;&#x5F97;&#x4E00;&#x4E2A;&#x5168;&#x5C40;&#x7684;&#x5E76;&#x53D1;&#x961F;&#x5217;&#xFF08;&#x5F53;&#x7136;&#x5982;&#x679C;&#x6709;&#x591A;&#x4E2A;&#x5E76;&#x53D1;&#x961F;&#x5217;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x524D;&#x8005;&#x521B;&#x5EFA;&#xFF09;&#x3002;&#x4E0B;&#x9762;&#x901A;&#x8FC7;&#x5E76;&#x884C;&#x961F;&#x5217;&#x6F14;&#x793A;&#x4E00;&#x4E0B;&#x591A;&#x4E2A;&#x56FE;&#x7247;&#x7684;&#x52A0;&#x8F7D;&#x3002;&#x4EE3;&#x7801;&#x4E0E;&#x4E0A;&#x9762;&#x4E32;&#x884C;&#x961F;&#x5217;&#x52A0;&#x8F7D;&#x7C7B;&#x4F3C;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x4FEE;&#x6539;&#x7167;&#x7247;&#x52A0;&#x8F7D;&#x65B9;&#x6CD5;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code class="lang-objective-c">-(void)loadImageWithMultiThread{
+    int count=ROW_COUNT*COLUMN_COUNT;
+
+    /*&#x53D6;&#x5F97;&#x5168;&#x5C40;&#x961F;&#x5217;
+     &#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#xFF1A;&#x7EBF;&#x7A0B;&#x4F18;&#x5148;&#x7EA7;
+     &#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#xFF1A;&#x6807;&#x8BB0;&#x53C2;&#x6570;&#xFF0C;&#x76EE;&#x524D;&#x6CA1;&#x6709;&#x7528;&#xFF0C;&#x4E00;&#x822C;&#x4F20;&#x5165;0
+    */
+    dispatch_queue_t globalQueue=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    //&#x521B;&#x5EFA;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x7528;&#x4E8E;&#x586B;&#x5145;&#x56FE;&#x7247;
+    for (int i=0; i&amp;lt;count; ++i) {
+        //&#x5F02;&#x6B65;&#x6267;&#x884C;&#x961F;&#x5217;&#x4EFB;&#x52A1;
+        dispatch_async(globalQueue, ^{
+            [self loadImage:[NSNumber numberWithInt:i]];
+        });
+    }
+}
+</code></pre>
+<p><img src="image/8.png" alt="&#x5F02;&#x6B65;&#x6267;&#x884C;&#x6548;&#x679C;"></p>
+<p>&#x7EC6;&#x5FC3;&#x7684;&#x670B;&#x53CB;&#x80AF;&#x5B9A;&#x4F1A;&#x601D;&#x8003;&#xFF0C;&#x65E2;&#x7136;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;dispatch_async()&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#xFF0C;&#x662F;&#x4E0D;&#x662F;&#x8FD8;&#x6709;&#x540C;&#x6B65;&#x65B9;&#x6CD5;&#xFF0C;&#x786E;&#x5B9E;&#x5982;&#x6B64;&#xFF0C;&#x5728;GCD&#x4E2D;&#x8FD8;&#x6709;&#x4E00;&#x4E2A;dispatch_sync()&#x65B9;&#x6CD5;&#x3002;&#x5047;&#x8BBE;&#x5C06;&#x4E0A;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x4FEE;&#x6539;&#x4E3A;&#x540C;&#x6B65;&#x8C03;&#x7528;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5982;&#x4E0B;&#x6548;&#x679C;&#xFF1A;</p>
+<p><img src="image/9.png" alt="&#x540C;&#x6B65;&#x6267;&#x884C;&#x6548;&#x679C;"></p>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x70B9;&#x51FB;&#x6309;&#x94AE;&#x540E;&#x6309;&#x94AE;&#x65E0;&#x6CD5;&#x518D;&#x6B21;&#x70B9;&#x51FB;&#xFF0C;&#x56E0;&#x4E3A;&#x6240;&#x6709;&#x56FE;&#x7247;&#x7684;&#x52A0;&#x8F7D;&#x5168;&#x90E8;&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E2D;&#xFF08;&#x53EF;&#x4EE5;&#x6253;&#x5370;&#x7EBF;&#x7A0B;&#x67E5;&#x770B;&#xFF09;&#xFF0C;&#x4E3B;&#x7EBF;&#x7A0B;&#x88AB;&#x963B;&#x585E;&#xFF0C;&#x9020;&#x6210;&#x56FE;&#x7247;&#x6700;&#x7EC8;&#x662F;&#x4E00;&#x6B21;&#x6027;&#x663E;&#x793A;&#x3002;&#x53EF;&#x4EE5;&#x5F97;&#x51FA;&#x7ED3;&#x8BBA;&#xFF1A;</p>
+<ul>
+<li>&#x5728;GDC&#x4E2D;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x662F;&#x591A;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x8FD8;&#x662F;&#x5355;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x53D6;&#x51B3;&#x4E8E;&#x5F53;&#x524D;&#x961F;&#x5217;&#x7C7B;&#x578B;&#x548C;&#x6267;&#x884C;&#x65B9;&#x6CD5;&#xFF0C;&#x53EA;&#x6709;&#x961F;&#x5217;&#x7C7B;&#x578B;&#x4E3A;&#x5E76;&#x884C;&#x961F;&#x5217;&#x5E76;&#x4E14;&#x4F7F;&#x7528;&#x5F02;&#x6B65;&#x65B9;&#x6CD5;&#x6267;&#x884C;&#x65F6;&#x624D;&#x80FD;&#x5728;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x4E2D;&#x6267;&#x884C;&#x3002;</li>
+<li>&#x4E32;&#x884C;&#x961F;&#x5217;&#x53EF;&#x4EE5;&#x6309;&#x987A;&#x5E8F;&#x6267;&#x884C;&#xFF0C;&#x5E76;&#x884C;&#x961F;&#x5217;&#x7684;&#x5F02;&#x6B65;&#x65B9;&#x6CD5;&#x65E0;&#x6CD5;&#x786E;&#x5B9A;&#x6267;&#x884C;&#x987A;&#x5E8F;&#x3002;</li>
+<li>UI&#x754C;&#x9762;&#x7684;&#x66F4;&#x65B0;&#x6700;&#x597D;&#x91C7;&#x7528;&#x540C;&#x6B65;&#x65B9;&#x6CD5;&#xFF0C;&#x5176;&#x4ED6;&#x64CD;&#x4F5C;&#x91C7;&#x7528;&#x5F02;&#x6B65;&#x65B9;&#x6CD5;&#x3002;</li>
+<li>GCD&#x4E2D;&#x591A;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x65B9;&#x6CD5;&#x4E0D;&#x9700;&#x8981;&#x4F7F;&#x7528;@autoreleasepool&#xFF0C;GCD&#x4F1A;&#x7BA1;&#x7406;&#x5185;&#x5B58;&#x3002;</li>
+</ul>
+<h4 id="&#x5176;&#x4ED6;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x65B9;&#x6CD5;">&#x5176;&#x4ED6;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x65B9;&#x6CD5;</h4>
+<p>GCD&#x6267;&#x884C;&#x4EFB;&#x52A1;&#x7684;&#x65B9;&#x6CD5;&#x5E76;&#x975E;&#x53EA;&#x6709;&#x7B80;&#x5355;&#x7684;&#x540C;&#x6B65;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#x548C;&#x5F02;&#x6B65;&#x8C03;&#x7528;&#x65B9;&#x6CD5;&#xFF0C;&#x8FD8;&#x6709;&#x5176;&#x4ED6;&#x4E00;&#x4E9B;&#x5E38;&#x7528;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<ul>
+<li>dispatch_apply():&#x91CD;&#x590D;&#x6267;&#x884C;&#x67D0;&#x4E2A;&#x4EFB;&#x52A1;&#xFF0C;&#x4F46;&#x662F;&#x6CE8;&#x610F;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x6CA1;&#x6709;&#x529E;&#x6CD5;&#x5F02;&#x6B65;&#x6267;&#x884C;&#xFF08;&#x4E3A;&#x4E86;&#x4E0D;&#x963B;&#x585E;&#x7EBF;&#x7A0B;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;dispatch_async()&#x5305;&#x88C5;&#x4E00;&#x4E0B;&#x518D;&#x6267;&#x884C;&#xFF09;&#x3002;</li>
+<li>dispatch_once():&#x5355;&#x6B21;&#x6267;&#x884C;&#x4E00;&#x4E2A;&#x4EFB;&#x52A1;&#xFF0C;&#x6B64;&#x65B9;&#x6CD5;&#x4E2D;&#x7684;&#x4EFB;&#x52A1;&#x53EA;&#x4F1A;&#x6267;&#x884C;&#x4E00;&#x6B21;&#xFF0C;&#x91CD;&#x590D;&#x8C03;&#x7528;&#x4E5F;&#x6CA1;&#x529E;&#x6CD5;&#x91CD;&#x590D;&#x6267;&#x884C;&#xFF08;&#x5355;&#x4F8B;&#x6A21;&#x5F0F;&#x4E2D;&#x5E38;&#x7528;&#x6B64;&#x65B9;&#x6CD5;&#xFF09;&#x3002;</li>
+<li>dispatch_time()&#xFF1A;&#x5EF6;&#x8FDF;&#x4E00;&#x5B9A;&#x7684;&#x65F6;&#x95F4;&#x540E;&#x6267;&#x884C;&#x3002;</li>
+<li>dispatch_barrier_async()&#xFF1A;&#x4F7F;&#x7528;&#x6B64;&#x65B9;&#x6CD5;&#x521B;&#x5EFA;&#x7684;&#x4EFB;&#x52A1;&#x9996;&#x5148;&#x4F1A;&#x67E5;&#x770B;&#x961F;&#x5217;&#x4E2D;&#x6709;&#x6CA1;&#x6709;&#x522B;&#x7684;&#x4EFB;&#x52A1;&#x8981;&#x6267;&#x884C;&#xFF0C;&#x5982;&#x679C;&#x6709;&#xFF0C;&#x5219;&#x4F1A;&#x7B49;&#x5F85;&#x5DF2;&#x6709;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x5B8C;&#x6BD5;&#x518D;&#x6267;&#x884C;&#xFF1B;&#x540C;&#x65F6;&#x5728;&#x6B64;&#x65B9;&#x6CD5;&#x540E;&#x6DFB;&#x52A0;&#x7684;&#x4EFB;&#x52A1;&#x5FC5;&#x987B;&#x7B49;&#x5F85;&#x6B64;&#x65B9;&#x6CD5;&#x4E2D;&#x4EFB;&#x52A1;&#x6267;&#x884C;&#x540E;&#x624D;&#x80FD;&#x6267;&#x884C;&#x3002;&#xFF08;&#x5229;&#x7528;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x63A7;&#x5236;&#x6267;&#x884C;&#x987A;&#x5E8F;&#xFF0C;&#x4F8B;&#x5982;&#x524D;&#x9762;&#x5148;&#x52A0;&#x8F7D;&#x6700;&#x540E;&#x4E00;&#x5F20;&#x56FE;&#x7247;&#x7684;&#x9700;&#x6C42;&#x5C31;&#x53EF;&#x4EE5;&#x5148;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x5C06;&#x6700;&#x540E;&#x4E00;&#x5F20;&#x56FE;&#x7247;&#x52A0;&#x8F7D;&#x7684;&#x64CD;&#x4F5C;&#x6DFB;&#x52A0;&#x5230;&#x961F;&#x5217;&#xFF0C;&#x7136;&#x540E;&#x8C03;&#x7528;dispatch_async()&#x6DFB;&#x52A0;&#x5176;&#x4ED6;&#x56FE;&#x7247;&#x52A0;&#x8F7D;&#x4EFB;&#x52A1;&#xFF09;</li>
+<li>dispatch_group_async()&#xFF1A;&#x5B9E;&#x73B0;&#x5BF9;&#x4EFB;&#x52A1;&#x5206;&#x7EC4;&#x7BA1;&#x7406;&#xFF0C;&#x5982;&#x679C;&#x4E00;&#x7EC4;&#x4EFB;&#x52A1;&#x5168;&#x90E8;&#x5B8C;&#x6210;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;dispatch_group_notify()&#x65B9;&#x6CD5;&#x83B7;&#x5F97;&#x5B8C;&#x6210;&#x901A;&#x77E5;&#xFF08;&#x9700;&#x8981;&#x5B9A;&#x4E49;dispatch_group_t&#x4F5C;&#x4E3A;&#x5206;&#x7EC4;&#x6807;&#x8BC6;&#xFF09;&#x3002;</li>
+</ul>
+<h2 id="&#x603B;&#x7ED3;">&#x603B;&#x7ED3;</h2>
+<ul>
+<li><p>1.&#x65E0;&#x8BBA;&#x4F7F;&#x7528;&#x54EA;&#x79CD;&#x65B9;&#x6CD5;&#x8FDB;&#x884C;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#xFF0C;&#x6BCF;&#x4E2A;&#x7EBF;&#x7A0B;&#x542F;&#x52A8;&#x540E;&#x5E76;&#x4E0D;&#x4E00;&#x5B9A;&#x7ACB;&#x5373;&#x6267;&#x884C;&#x76F8;&#x5E94;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x5177;&#x4F53;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x7531;&#x7CFB;&#x7EDF;&#x8C03;&#x5EA6;&#xFF08;CPU&#x7A7A;&#x95F2;&#x65F6;&#x5C31;&#x4F1A;&#x6267;&#x884C;&#xFF09;&#x3002;</p>
+</li>
+<li><p>2.&#x66F4;&#x65B0;UI&#x5E94;&#x8BE5;&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#xFF08;UI&#x7EBF;&#x7A0B;&#xFF09;&#x4E2D;&#x8FDB;&#x884C;&#xFF0C;&#x5E76;&#x4E14;&#x63A8;&#x8350;&#x4F7F;&#x7528;&#x540C;&#x6B65;&#x8C03;&#x7528;&#xFF0C;&#x5E38;&#x7528;&#x7684;&#x65B9;&#x6CD5;&#x5982;&#x4E0B;&#xFF1A;</p>
+</li>
+</ul>
+<blockquote>
+<p>-(void)performSelectorOnMainThread:(SEL)aSelector withObject:(id)arg waitUntilDone:(BOOL)wait</p>
+</blockquote>
+<p>&#x6216;&#x8005;</p>
+<blockquote>
+<p>-(void)performSelector:(SEL)aSelector onThread:(NSThread *)thr withObject:(id)arg waitUntilDone:(BOOL) wait</p>
+</blockquote>
+<p>&#x65B9;&#x6CD5;&#x4F20;&#x9012;&#x4E3B;&#x7EBF;&#x7A0B;,[NSThread mainThread]</p>
+<blockquote>
+<p>[NSOperationQueue mainQueue] addOperationWithBlock:</p>
+</blockquote>
+<p>&#x4F7F;&#x7528;dispatch_get_main_queue</p>
+<blockquote>
+<p>dispatch_sync(dispatch_get_main_queue(), ^{})</p>
+</blockquote>
+<ul>
+<li><p>3.NSThread&#x9002;&#x5408;&#x8F7B;&#x91CF;&#x7EA7;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#xFF0C;&#x63A7;&#x5236;&#x7EBF;&#x7A0B;&#x987A;&#x5E8F;&#x6BD4;&#x8F83;&#x96BE;&#xFF0C;&#x540C;&#x65F6;&#x7EBF;&#x7A0B;&#x603B;&#x6570;&#x65E0;&#x6CD5;&#x63A7;&#x5236;&#xFF08;&#x6BCF;&#x6B21;&#x521B;&#x5EFA;&#x5E76;&#x4E0D;&#x80FD;&#x91CD;&#x7528;&#x4E4B;&#x524D;&#x7684;&#x7EBF;&#x7A0B;&#xFF0C;&#x53EA;&#x80FD;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x7EBF;&#x7A0B;&#xFF09;&#x3002;</p>
+</li>
+<li><p>4.&#x5BF9;&#x4E8E;&#x7B80;&#x5355;&#x7684;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x5EFA;&#x8BAE;&#x4F7F;&#x7528;NSObject&#x7684;&#x6269;&#x5C55;&#x65B9;&#x6CD5;&#x5B8C;&#x6210;&#xFF0C;&#x800C;&#x4E0D;&#x5FC5;&#x4F7F;&#x7528;NSThread&#x3002;</p>
+</li>
+<li><p>5.&#x53EF;&#x4EE5;&#x4F7F;&#x7528;NSThread&#x7684;currentThread&#x65B9;&#x6CD5;&#x53D6;&#x5F97;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#xFF0C;&#x4F7F;&#x7528; sleepForTimeInterval:&#x65B9;&#x6CD5;&#x8BA9;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x4F11;&#x7720;&#x3002;</p>
+</li>
+<li><p>6.NSOperation&#x8FDB;&#x884C;&#x591A;&#x7EBF;&#x7A0B;&#x5F00;&#x53D1;&#x53EF;&#x4EE5;&#x63A7;&#x5236;&#x7EBF;&#x7A0B;&#x603B;&#x6570;&#x53CA;&#x7EBF;&#x7A0B;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#x3002;</p>
+</li>
+<li><p>7.&#x521B;&#x5EFA;&#x4E00;&#x4E2A;NSOperation&#x4E0D;&#x5E94;&#x8BE5;&#x76F4;&#x63A5;&#x8C03;&#x7528;start&#x65B9;&#x6CD5;&#xFF08;&#x5982;&#x679C;&#x76F4;&#x63A5;start&#x5219;&#x4F1A;&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E2D;&#x8C03;&#x7528;&#xFF09;&#x800C;&#x662F;&#x5E94;&#x8BE5;&#x653E;&#x5230;NSOperationQueue&#x4E2D;&#x542F;&#x52A8;&#x3002;</p>
+</li>
+<li><p>8.&#x76F8;&#x6BD4;NSInvocationOperation&#x63A8;&#x8350;&#x4F7F;&#x7528;NSBlockOperation&#xFF0C;&#x4EE3;&#x7801;&#x7B80;&#x5355;&#xFF0C;&#x540C;&#x65F6;&#x7531;&#x4E8E;&#x95ED;&#x5305;&#x6027;&#x4F7F;&#x5B83;&#x6CA1;&#x6709;&#x4F20;&#x53C2;&#x95EE;&#x9898;&#x3002;</p>
+</li>
+<li><p>9.NSOperation&#x662F;&#x5BF9;GCD&#x9762;&#x5411;&#x5BF9;&#x8C61;&#x7684;ObjC&#x5C01;&#x88C5;&#xFF0C;&#x4F46;&#x662F;&#x76F8;&#x6BD4;GCD&#x57FA;&#x4E8E;C&#x8BED;&#x8A00;&#x5F00;&#x53D1;&#xFF0C;&#x6548;&#x7387;&#x5374;&#x66F4;&#x9AD8;&#xFF0C;&#x5EFA;&#x8BAE;&#x5982;&#x679C;&#x4EFB;&#x52A1;&#x4E4B;&#x95F4;&#x6709;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#x6216;&#x8005;&#x60F3;&#x8981;&#x76D1;&#x542C;&#x4EFB;&#x52A1;&#x5B8C;&#x6210;&#x72B6;&#x6001;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4F18;&#x5148;&#x9009;&#x62E9;NSOperation&#x5426;&#x5219;&#x4F7F;&#x7528;GCD&#x3002;</p>
+</li>
+<li><p>10.&#x5728;GCD&#x4E2D;&#x4E32;&#x884C;&#x961F;&#x5217;&#x4E2D;&#x7684;&#x4EFB;&#x52A1;&#x88AB;&#x5B89;&#x6392;&#x5230;&#x4E00;&#x4E2A;&#x5355;&#x4E00;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#xFF08;&#x4E0D;&#x662F;&#x4E3B;&#x7EBF;&#x7A0B;&#xFF09;&#xFF0C;&#x53EF;&#x4EE5;&#x65B9;&#x4FBF;&#x5730;&#x63A7;&#x5236;&#x6267;&#x884C;&#x987A;&#x5E8F;&#xFF1B;&#x5E76;&#x53D1;&#x961F;&#x5217;&#x5728;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x4E2D;&#x6267;&#x884C;&#xFF08;&#x524D;&#x63D0;&#x662F;&#x4F7F;&#x7528;&#x5F02;&#x6B65;&#x65B9;&#x6CD5;&#xFF09;&#xFF0C;&#x987A;&#x5E8F;&#x63A7;&#x5236;&#x76F8;&#x5BF9;&#x590D;&#x6742;&#xFF0C;&#x4F46;&#x662F;&#x66F4;&#x9AD8;&#x6548;&#x3002;</p>
+</li>
+<li><p>11.&#x5728;GDC&#x4E2D;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x662F;&#x591A;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x8FD8;&#x662F;&#x5355;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x53D6;&#x51B3;&#x4E8E;&#x5F53;&#x524D;&#x961F;&#x5217;&#x7C7B;&#x578B;&#x548C;&#x6267;&#x884C;&#x65B9;&#x6CD5;&#xFF0C;&#x53EA;&#x6709;&#x961F;&#x5217;&#x7C7B;&#x578B;&#x4E3A;&#x5E76;&#x884C;&#x961F;&#x5217;&#x5E76;&#x4E14;&#x4F7F;&#x7528;&#x5F02;&#x6B65;&#x65B9;&#x6CD5;&#x6267;&#x884C;&#x65F6;&#x624D;&#x80FD;&#x5728;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x4E2D;&#x6267;&#x884C;&#xFF08;&#x5982;&#x679C;&#x662F;&#x5E76;&#x884C;&#x961F;&#x5217;&#x4F7F;&#x7528;&#x540C;&#x6B65;&#x65B9;&#x6CD5;&#x8C03;&#x7528;&#x5219;&#x4F1A;&#x5728;&#x4E3B;&#x7EBF;&#x7A0B;&#x4E2D;&#x6267;&#x884C;&#xFF09;&#x3002;</p>
+</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="iOS多线程开发－线程原理.html" class="navigation navigation-prev " aria-label="Previous page: 线程原理">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="iOS多线程开发－线程安全.html" class="navigation navigation-next " aria-label="Next page: 线程安全">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"多线程实现方式","level":"1.3.2","depth":2,"next":{"title":"线程安全","level":"1.3.3","depth":2,"path":"multithreading/iOS多线程开发－线程安全.md","ref":"multithreading/iOS多线程开发－线程安全.md","articles":[]},"previous":{"title":"线程原理","level":"1.3.1","depth":2,"path":"multithreading/iOS多线程开发－线程原理.md","ref":"multithreading/iOS多线程开发－线程原理.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"zhoumin","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"知识小集","language":"zh-hans","links":{"sidebar":{"GitHub主页":"https://github.com/z251257144"},"gitbook":true},"gitbook":"*","description":"知识小集收录我的学习经历和工作经历..."},"file":{"path":"multithreading/iOS多线程开发－多线程实现方式.md","mtime":"2020-12-09T06:37:42.792Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-12-09T06:38:25.877Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

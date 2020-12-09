@@ -1,0 +1,490 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>线程安全 · 知识小集</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="zhoumin">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="iOS多线程开发－RunLoop.html" />
+    
+    
+    <link rel="prev" href="iOS多线程开发－多线程实现方式.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+    
+        
+        <li>
+            <a href="https://github.com/z251257144" target="_blank" class="custom-link">GitHub主页</a>
+        </li>
+    
+    
+
+    
+    <li class="divider"></li>
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" >
+            
+                <span>
+            
+                    
+                    InterView
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../InterView/Foundation.html">
+            
+                <a href="../InterView/Foundation.html">
+            
+                    
+                    Foundation
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" >
+            
+                <span>
+            
+                    
+                    多线程开发
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="iOS多线程开发－线程原理.html">
+            
+                <a href="iOS多线程开发－线程原理.html">
+            
+                    
+                    线程原理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="iOS多线程开发－多线程实现方式.html">
+            
+                <a href="iOS多线程开发－多线程实现方式.html">
+            
+                    
+                    多线程实现方式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3.3" data-path="iOS多线程开发－线程安全.html">
+            
+                <a href="iOS多线程开发－线程安全.html">
+            
+                    
+                    线程安全
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="iOS多线程开发－RunLoop.html">
+            
+                <a href="iOS多线程开发－RunLoop.html">
+            
+                    
+                    RunLoop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <span>
+            
+                    
+                    UI
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../UI/UIView_CALayer.html">
+            
+                <a href="../UI/UIView_CALayer.html">
+            
+                    
+                    UIView & CALayer 关系
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >线程安全</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x7EBF;&#x7A0B;&#x5B89;&#x5168;">&#x7EBF;&#x7A0B;&#x5B89;&#x5168;</h2>
+<p>&#x200B;        &#x8BF4;&#x5230;&#x591A;&#x7EBF;&#x7A0B;&#x5C31;&#x4E0D;&#x5F97;&#x4E0D;&#x63D0;&#x591A;&#x7EBF;&#x7A0B;&#x4E2D;&#x7684;&#x9501;&#x673A;&#x5236;&#xFF0C;&#x591A;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x8FC7;&#x7A0B;&#x4E2D;&#x5F80;&#x5F80;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x662F;&#x5E76;&#x53D1;&#x6267;&#x884C;&#x7684;&#xFF0C;&#x540C;&#x4E00;&#x4E2A;&#x8D44;&#x6E90;&#x53EF;&#x80FD;&#x88AB;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x540C;&#x65F6;&#x8BBF;&#x95EE;&#xFF0C;&#x9020;&#x6210;&#x8D44;&#x6E90;&#x62A2;&#x593A;&#xFF0C;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x4E2D;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x9501;&#x673A;&#x5236;&#x5F80;&#x5F80;&#x4F1A;&#x9020;&#x6210;&#x91CD;&#x5927;&#x95EE;&#x9898;&#x3002;&#x4E3E;&#x4F8B;&#x6765;&#x8BF4;&#xFF0C;&#x6BCF;&#x5E74;&#x6625;&#x8282;&#x90FD;&#x662F;&#x4E00;&#x7968;&#x96BE;&#x6C42;&#xFF0C;&#x5728;12306&#x4E70;&#x7968;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x6210;&#x767E;&#x4E0A;&#x5343;&#x7684;&#x7968;&#x77AC;&#x95F4;&#x5C31;&#x6D88;&#x5931;&#x4E86;&#x3002;&#x4E0D;&#x59A8;&#x5047;&#x8BBE;&#x67D0;&#x8F86;&#x8F66;&#x6709;1&#x5343;&#x5F20;&#x7968;&#xFF0C;&#x540C;&#x65F6;&#x6709;&#x51E0;&#x4E07;&#x4EBA;&#x5728;&#x62A2;&#x8FD9;&#x5217;&#x8F66;&#x7684;&#x8F66;&#x7968;&#xFF0C;&#x987A;&#x5229;&#x7684;&#x8BDD;&#x524D;&#x9762;&#x7684;&#x4EBA;&#x90FD;&#x80FD;&#x4E70;&#x5230;&#x7968;&#x3002;&#x4F46;&#x662F;&#x5982;&#x679C;&#x73B0;&#x5728;&#x53EA;&#x5269;&#x4E0B;&#x4E00;&#x5F20;&#x7968;&#x4E86;&#xFF0C;&#x800C;&#x540C;&#x65F6;&#x8FD8;&#x6709;&#x51E0;&#x5343;&#x4EBA;&#x5728;&#x8D2D;&#x4E70;&#x8FD9;&#x5F20;&#x7968;&#xFF0C;&#x867D;&#x7136;&#x5728;&#x8FDB;&#x5165;&#x8D2D;&#x7968;&#x73AF;&#x8282;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x5224;&#x65AD;&#x5F53;&#x524D;&#x7968;&#x6570;&#xFF0C;&#x4F46;&#x662F;&#x5F53;&#x524D;&#x5DF2;&#x7ECF;&#x6709;100&#x4E2A;&#x7EBF;&#x7A0B;&#x8FDB;&#x5165;&#x8D2D;&#x7968;&#x7684;&#x73AF;&#x8282;&#xFF0C;&#x6BCF;&#x4E2A;&#x7EBF;&#x7A0B;&#x5904;&#x7406;&#x5B8C;&#x7968;&#x6570;&#x90FD;&#x4F1A;&#x51CF;1,100&#x4E2A;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#x5B8C;&#x5F53;&#x524D;&#x7968;&#x6570;&#x4E3A;-99&#xFF0C;&#x9047;&#x5230;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x5F88;&#x660E;&#x663E;&#x662F;&#x4E0D;&#x5141;&#x8BB8;&#x7684;&#x3002;</p>
+<p>&#x8981;&#x89E3;&#x51B3;&#x8D44;&#x6E90;&#x62A2;&#x593A;&#x95EE;&#x9898;&#x5728;iOS&#x4E2D;&#x6709;&#x5E38;&#x7528;&#x7684;&#x6709;&#x4E24;&#x79CD;&#x65B9;&#x6CD5;&#xFF1A;&#x4E00;&#x79CD;&#x662F;&#x4F7F;&#x7528;NSLock&#x540C;&#x6B65;&#x9501;&#xFF0C;&#x53E6;&#x4E00;&#x79CD;&#x662F;&#x4F7F;&#x7528;@synchronized&#x4EE3;&#x7801;&#x5757;&#x3002;&#x4E24;&#x79CD;&#x65B9;&#x6CD5;&#x5B9E;&#x73B0;&#x539F;&#x7406;&#x662F;&#x7C7B;&#x4F3C;&#x7684;&#xFF0C;&#x53EA;&#x662F;&#x5728;&#x5904;&#x7406;&#x4E0A;&#x4EE3;&#x7801;&#x5757;&#x4F7F;&#x7528;&#x8D77;&#x6765;&#x66F4;&#x52A0;&#x7B80;&#x5355;&#xFF08;C#&#x4E2D;&#x4E5F;&#x6709;&#x7C7B;&#x4F3C;&#x7684;&#x5904;&#x7406;&#x673A;&#x5236;synchronized&#x548C;lock&#xFF09;&#x3002;</p>
+<h2 id="&#x591A;&#x7EBF;&#x7A0B;&#x7684;&#x5B89;&#x5168;&#x9690;&#x60A3;">&#x591A;&#x7EBF;&#x7A0B;&#x7684;&#x5B89;&#x5168;&#x9690;&#x60A3;</h2>
+<h4 id="&#x8D44;&#x6E90;&#x5171;&#x4EAB;">&#x8D44;&#x6E90;&#x5171;&#x4EAB;</h4>
+<p>&#x4E00;&#x5757;&#x8D44;&#x6E90;&#x53EF;&#x80FD;&#x4F1A;&#x88AB;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x5171;&#x4EAB;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x53EF;&#x80FD;&#x4F1A;&#x8BBF;&#x95EE;&#x540C;&#x4E00;&#x5757;&#x8D44;&#x6E90;&#x3002;&#x6BD4;&#x5982;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x8BBF;&#x95EE;&#x540C;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x3001;&#x540C;&#x4E00;&#x4E2A;&#x53D8;&#x91CF;&#x3001;&#x540C;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x3002;&#x5F53;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#x8BBF;&#x95EE;&#x540C;&#x4E00;&#x5757;&#x8D44;&#x6E90;&#x65F6;&#xFF0C;&#x5F88;&#x5BB9;&#x6613;&#x5F15;&#x53D1;&#x6570;&#x636E;&#x9519;&#x4E71;&#x548C;&#x6570;&#x636E;&#x5B89;&#x5168;&#x95EE;&#x9898;&#x3002;</p>
+<p>&#x200B;      </p>
+<pre><code class="lang-objective-c">- (void)test {
+    //&#x9ED8;&#x8BA4;&#x6709;20&#x5F20;&#x7968;
+    leftTicketsCount = 10;
+
+    //&#x5F00;&#x542F;&#x591A;&#x4E2A;&#x7EBF;&#x7A0B;&#xFF0C;&#x6A21;&#x62DF;&#x552E;&#x7968;&#x5458;&#x552E;&#x7968;
+    NSThread *thread1=[[NSThread alloc]initWithTarget:self selector:@selector(sellTickets) object:nil];
+    thread1.name=@&quot;&#x552E;&#x7968;&#x5458;A&quot;;
+
+    NSThread *thread2=[[NSThread alloc]initWithTarget:self selector:@selector(sellTickets) object:nil];
+    thread2.name=@&quot;&#x552E;&#x7968;&#x5458;B&quot;;
+
+    NSThread *thread3=[[NSThread alloc]initWithTarget:self selector:@selector(sellTickets) object:nil];
+    thread3.name=@&quot;&#x552E;&#x7968;&#x5458;C&quot;;
+
+    //&#x5F00;&#x542F;&#x7EBF;&#x7A0B;
+
+    [thread1 start];
+    [thread2 start];
+    [thread3 start];
+}
+
+- (void)sellTickets {
+    while (1) {
+        //1.&#x5148;&#x68C0;&#x67E5;&#x7968;&#x6570;
+        int count = leftTicketsCount;
+        if (count&gt;0) {
+            //&#x6682;&#x505C;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;
+            [NSThread sleepForTimeInterval:0.002];
+      //2.&#x7968;&#x6570;-1
+      leftTicketsCount= count-1;
+
+      //&#x83B7;&#x53D6;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;
+      NSThread *current=[NSThread currentThread];
+      NSLog(@&quot;%@--&#x5356;&#x4E86;&#x4E00;&#x5F20;&#x7968;&#xFF0C;&#x8FD8;&#x5269;&#x4F59;%d&#x5F20;&#x7968;&quot;, current.name, leftTicketsCount);
+  }
+  else {
+      //&#x9000;&#x51FA;&#x7EBF;&#x7A0B;
+      [NSThread exit];
+  }
+ }
+}
+</code></pre>
+<p>&#x6253;&#x5370;&#x7ED3;&#x679C;&#xFF1A;</p>
+<p><img src="image/10.png" alt="&#x552E;&#x7968;&#x7ED3;&#x679C;&#xFF0C;&#x51FA;&#x73B0;&#x4E86;&#x91CD;&#x590D;&#x4E70;&#x7968;&#x7684;&#x73B0;&#x8C61;"></p>
+<h2 id="&#x5982;&#x4F55;&#x89E3;&#x51B3;">&#x5982;&#x4F55;&#x89E3;&#x51B3;</h2>
+<h4 id="1&#x4F7F;&#x7528;&#x4E92;&#x65A5;&#x9501;">1.&#x4F7F;&#x7528;&#x4E92;&#x65A5;&#x9501;</h4>
+<p>&#x683C;&#x5F0F;&#xFF1A;</p>
+<blockquote>
+<p>@synchronized(&#x9501;&#x5BF9;&#x8C61;) { 
+// &#x9700;&#x8981;&#x9501;&#x5B9A;&#x7684;&#x4EE3;&#x7801;<br>}</p>
+</blockquote>
+<p>&#x6CE8;&#x610F;&#xFF1A;&#x9501;&#x5B9A;1&#x4EFD;&#x4EE3;&#x7801;&#x53EA;&#x7528;1&#x628A;&#x9501;&#xFF0C;&#x7528;&#x591A;&#x628A;&#x9501;&#x662F;&#x65E0;&#x6548;&#x7684;</p>
+<pre><code class="lang-objective-c">
+- (void)sellTickets
+{
+    while (1) {
+        @synchronized(self){//&#x52A0;&#x4E00;&#x628A;&#x9501;
+            //1.&#x5148;&#x68C0;&#x67E5;&#x7968;&#x6570;
+            int count = leftTicketsCount;
+            if (count&gt;0) {
+                //&#x6682;&#x505C;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;
+                [NSThread sleepForTimeInterval:0.002];
+            //2.&#x7968;&#x6570;-1
+            leftTicketsCount= count-1;
+
+            //&#x83B7;&#x53D6;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;
+            NSThread *current=[NSThread currentThread];
+            NSLog(@&quot;%@--&#x5356;&#x4E86;&#x4E00;&#x5F20;&#x7968;&#xFF0C;&#x8FD8;&#x5269;&#x4F59;%d&#x5F20;&#x7968;&quot;, current.name, leftTicketsCount);
+        }
+        else {
+            //&#x9000;&#x51FA;&#x7EBF;&#x7A0B;
+            [NSThread exit];
+        }
+    }
+}
+</code></pre>
+<p>&#x6253;&#x5370;&#x7ED3;&#x679C;&#xFF1A;</p>
+<p><img src="image/11.png" alt="Paste_Image.png"></p>
+<p>&#x4E92;&#x65A5;&#x9501;&#x7684;&#x4F18;&#x7F3A;&#x70B9;
+&#x4F18;&#x70B9;&#xFF1A;&#x80FD;&#x6709;&#x6548;&#x9632;&#x6B62;&#x56E0;&#x591A;&#x7EBF;&#x7A0B;&#x62A2;&#x593A;&#x8D44;&#x6E90;&#x9020;&#x6210;&#x7684;&#x6570;&#x636E;&#x5B89;&#x5168;&#x95EE;&#x9898;
+&#x7F3A;&#x70B9;&#xFF1A;&#x9700;&#x8981;&#x6D88;&#x8017;&#x5927;&#x91CF;&#x7684;CPU&#x8D44;&#x6E90;</p>
+<p>&#x4E92;&#x65A5;&#x9501;&#x7684;&#x4F7F;&#x7528;&#x524D;&#x63D0;&#xFF1A;&#x591A;&#x6761;&#x7EBF;&#x7A0B;&#x62A2;&#x593A;&#x540C;&#x4E00;&#x5757;&#x8D44;&#x6E90; 
+&#x76F8;&#x5173;&#x4E13;&#x4E1A;&#x672F;&#x8BED;&#xFF1A;&#x7EBF;&#x7A0B;&#x540C;&#x6B65;,&#x591A;&#x6761;&#x7EBF;&#x7A0B;&#x6309;&#x987A;&#x5E8F;&#x5730;&#x6267;&#x884C;&#x4EFB;&#x52A1;
+&#x4E92;&#x65A5;&#x9501;&#xFF0C;&#x5C31;&#x662F;&#x4F7F;&#x7528;&#x4E86;&#x7EBF;&#x7A0B;&#x540C;&#x6B65;&#x6280;&#x672F;</p>
+<h4 id="2&#x539F;&#x5B50;&#x548C;&#x975E;&#x539F;&#x5B50;&#x5C5E;&#x6027;">2.&#x539F;&#x5B50;&#x548C;&#x975E;&#x539F;&#x5B50;&#x5C5E;&#x6027;</h4>
+<p>OC&#x5728;&#x5B9A;&#x4E49;&#x5C5E;&#x6027;&#x65F6;&#x6709;nonatomic&#x548C;atomic&#x4E24;&#x79CD;&#x9009;&#x62E9;
+atomic&#xFF1A;&#x539F;&#x5B50;&#x5C5E;&#x6027;&#xFF0C;&#x4E3A;setter&#x65B9;&#x6CD5;&#x52A0;&#x9501;&#xFF08;&#x9ED8;&#x8BA4;&#x5C31;&#x662F;atomic&#xFF09;
+nonatomic&#xFF1A;&#x975E;&#x539F;&#x5B50;&#x5C5E;&#x6027;&#xFF0C;&#x4E0D;&#x4F1A;&#x4E3A;setter&#x65B9;&#x6CD5;&#x52A0;&#x9501;</p>
+<p>atomic&#x52A0;&#x9501;&#x539F;&#x7406;&#xFF1A;</p>
+<pre><code class="lang-objective-c">@property (assign, atomic) int age;
+
+- (void)setAge:(int)age
+{ 
+    @synchronized(self) { 
+       _age = age;
+    }
+}
+</code></pre>
+<p>nonatomic&#x548C;atomic&#x5BF9;&#x6BD4;</p>
+<ul>
+<li>atomic&#xFF1A;&#x7EBF;&#x7A0B;&#x5B89;&#x5168;&#xFF0C;&#x9700;&#x8981;&#x6D88;&#x8017;&#x5927;&#x91CF;&#x7684;&#x8D44;&#x6E90;</li>
+<li>nonatomic&#xFF1A;&#x975E;&#x7EBF;&#x7A0B;&#x5B89;&#x5168;&#xFF0C;&#x9002;&#x5408;&#x5185;&#x5B58;&#x5C0F;&#x7684;&#x79FB;&#x52A8;&#x8BBE;&#x5907;</li>
+</ul>
+<h4 id="3nslock">3.NSLock</h4>
+<p><img src="image/12.png" alt="NSLock&#x4F7F;&#x7528;&#x6548;&#x679C;"></p>
+<h4 id="4dispatchsemaphore">4.dispatch_semaphore</h4>
+<p><img src="image/13.png" alt="dispatch_semaphore&#x4F7F;&#x7528;&#x6548;&#x679C;"></p>
+<blockquote>
+<p><a href="https://twitter.com/intent/tweet?text=%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20iOS%20%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%94%81%20%C2%BB&amp;hashtags=&amp;url=https://bestswifter.com/ios-lock/" title="Tweet &apos;&#x6DF1;&#x5165;&#x7406;&#x89E3; iOS &#x5F00;&#x53D1;&#x4E2D;&#x7684;&#x9501;&apos;" target="_blank"># &#x6DF1;&#x5165;&#x7406;&#x89E3; iOS &#x5F00;&#x53D1;&#x4E2D;&#x7684;&#x9501;</a></p>
+</blockquote>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="iOS多线程开发－多线程实现方式.html" class="navigation navigation-prev " aria-label="Previous page: 多线程实现方式">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="iOS多线程开发－RunLoop.html" class="navigation navigation-next " aria-label="Next page: RunLoop">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"线程安全","level":"1.3.3","depth":2,"next":{"title":"RunLoop","level":"1.3.4","depth":2,"path":"multithreading/iOS多线程开发－RunLoop.md","ref":"multithreading/iOS多线程开发－RunLoop.md","articles":[]},"previous":{"title":"多线程实现方式","level":"1.3.2","depth":2,"path":"multithreading/iOS多线程开发－多线程实现方式.md","ref":"multithreading/iOS多线程开发－多线程实现方式.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"zhoumin","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"知识小集","language":"zh-hans","links":{"sidebar":{"GitHub主页":"https://github.com/z251257144"},"gitbook":true},"gitbook":"*","description":"知识小集收录我的学习经历和工作经历..."},"file":{"path":"multithreading/iOS多线程开发－线程安全.md","mtime":"2020-12-09T06:37:42.792Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-12-09T06:38:25.877Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
